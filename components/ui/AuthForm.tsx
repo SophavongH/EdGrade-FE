@@ -1,0 +1,91 @@
+"use client";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { login } from "../../lib/auth";
+import { FIELD_NAME, FIELD_TYPES } from "../../constants";
+import { Input } from "./input";
+import { Button } from "./button";
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  FormControl,
+} from "./form";
+
+const loginSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(6),
+});
+
+export type LoginType = z.infer<typeof loginSchema>;
+
+export default function AuthForm() {
+  const router = useRouter();
+  const form = useForm<LoginType>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: { email: "", password: "" },
+  });
+
+  const onSubmit = async (data: LoginType) => {
+    // Clear previous errors
+    form.clearErrors();
+    const result = await login(data.email, data.password);
+
+    // Check for suspended account error
+    if (result.error === "Account is suspended.") {
+      toast.error("Your account is suspended. Please contact support.");
+      return;
+    }
+
+    if (result.success) {
+      toast.success("Login successful");
+      if (result.token) localStorage.setItem("token", result.token); // <-- ADD THIS LINE
+      if (result.user?.id) localStorage.setItem("userId", result.user.id); // <-- ADD THIS LINE
+      router.push(result.role === "admin" ? "/admin" : "/school");
+    } else {
+      // Set error on the correct field
+      if (result.error?.toLowerCase().includes("email")) {
+        form.setError("email", { message: result.error });
+      } else if (result.error?.toLowerCase().includes("password")) {
+        form.setError("password", { message: result.error });
+      } else {
+        // fallback: show as a general error
+        toast.error(result.error || "Login failed");
+      }
+    }
+  };
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        {Object.keys(form.getValues()).map((field) => (
+          <FormField
+            key={field}
+            control={form.control}
+            name={field as keyof LoginType}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>
+                  {FIELD_NAME[field.name as keyof typeof FIELD_NAME]}
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    type={FIELD_TYPES[field.name as keyof typeof FIELD_TYPES]}
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        ))}
+        <Button type="submit">Log in</Button>
+      </form>
+    </Form>
+  );
+}
