@@ -34,14 +34,21 @@ export default function CreateSchoolUser() {
 
   const handleSubmit = async (data: { name: string; email: string; password?: string }) => {
     setLoading(true);
+    const token = localStorage.getItem("token");
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/create-school-user`, {
       method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${localStorage.getItem("token")}` },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
       body: JSON.stringify(data),
     });
     setLoading(false);
+    const result = await res.json();
     if (res.ok) {
       router.push("/admin");
+    } else if (res.status === 409 && result.error) {
+      alert(result.error); // Shows "Email already exists"
     } else {
       alert("Failed to create user");
     }
