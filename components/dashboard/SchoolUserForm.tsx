@@ -24,7 +24,7 @@ export default function SchoolUserForm({
     setEmail(initial?.email || "");
   }, [initial]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isEdit && password !== confirm) {
       alert("Passwords do not match");
@@ -39,6 +39,22 @@ export default function SchoolUserForm({
     } else {
       onSubmit({ name, email });
     }
+    const token = localStorage.getItem("token"); // or however you store it
+
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/create-school-user`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        name,
+        email,
+        password,
+      }),
+    });
+
+    await res.json();
   };
 
   return (
