@@ -27,7 +27,9 @@ export default function ReportViewPage() {
   const subjects = Object.entries(score).filter(
     ([key]) => !["rank", "grade", "total", "average", "absent"].includes(key)
   );
-  const totalStudents = report.totalStudents || "-";
+  const totalStudents = typeof report.totalStudents === "number"
+    ? report.totalStudents
+    : "-";
 
   return (
     <div className="max-w-xs mx-auto bg-white rounded-2xl shadow-lg p-4 mt-4 border-2 border-blue-100 font-[Kantumruy]">
