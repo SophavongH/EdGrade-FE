@@ -73,7 +73,14 @@ const SchoolSidebar = ({ session }: { session: Session }) => {
       </div>
 
       {/* User Profile Section */}
-      <div className="w-full flex justify-center">
+      <div className="w-full flex flex-col items-center">
+        {/* ChevronUp (ProfileMenuUp) - show above user info on mobile, right in row on desktop */}
+        <div className="w-full flex justify-center md:hidden mb-2">
+          <ProfileMenuUp
+            name={session?.user?.name}
+            email={session?.user?.email}
+          />
+        </div>
         <div className="flex items-center gap-3 rounded-[32px] bg-white shadow px-4 py-2 border border-gray-100 w-[95%] mx-auto">
           {/* Avatar */}
           <div className="relative">
@@ -92,11 +99,13 @@ const SchoolSidebar = ({ session }: { session: Session }) => {
               {session?.user?.email}
             </p>
           </div>
-          {/* Open menu button */}
-          <ProfileMenuUp
-            name={session?.user?.name}
-            email={session?.user?.email}
-          />
+          {/* ChevronUp (ProfileMenuUp) - show inline only on desktop */}
+          <div className="hidden md:block">
+            <ProfileMenuUp
+              name={session?.user?.name}
+              email={session?.user?.email}
+            />
+          </div>
         </div>
       </div>
     </div>
