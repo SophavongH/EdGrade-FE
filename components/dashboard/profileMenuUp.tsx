@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect } from "react";
 import { LogOut } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { ChevronUp, UserRoundPen, ChevronDown,Languages } from "lucide-react";
+import { Ellipsis, UserRoundPen, ChevronDown,Languages } from "lucide-react";
 
 
 type Props = {
@@ -38,7 +38,7 @@ export default function ProfileMenuUp({ name, email }: Props) {
         title="Open menu"
         onClick={() => setOpen((v) => !v)}
       >
-        <ChevronUp className={`w-5 h-5 transition-transform ${open ? "rotate-180" : ""}`} />
+        <Ellipsis className={`w-5 h-5 transition-transform ${open ? "rotate-180" : ""}`} />
       </button>
       {open && (
         <div
