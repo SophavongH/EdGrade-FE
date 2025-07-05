@@ -1,21 +1,41 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
+import { useEffect, useState, useRef } from "react";
 import { LogOut } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { Ellipsis, UserRoundPen, ChevronDown,Languages } from "lucide-react";
-
+import { useRouter, usePathname } from "next/navigation";
+import { Ellipsis, UserRoundPen, ChevronDown, Languages } from "lucide-react";
 
 type Props = {
   name?: string;
   email?: string;
 };
 
-export default function ProfileMenuUp({ name, email }: Props) {
+export default function ProfileMenuUp({ name, email, onLangChange }: Props & { onLangChange?: (lang: "en" | "kh") => void }) {
   const [open, setOpen] = useState(false);
   const [lang, setLang] = useState<"en" | "kh">("en");
   const [langDropdown, setLangDropdown] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const router = useRouter();
+  const pathname = usePathname();
+
+  // Load language from localStorage on mount
+  useEffect(() => {
+    const storedLang = localStorage.getItem("lang");
+    if (storedLang === "en" || storedLang === "kh") {
+      setLang(storedLang);
+    }
+  }, []);
+
+  // Save language to localStorage and call callback
+  const handleLangChange = (newLang: "en" | "kh") => {
+    setLang(newLang);
+    localStorage.setItem("lang", newLang);
+    setLangDropdown(false);
+    if (onLangChange) onLangChange(newLang);
+
+    // Use next-intl's router to switch locale
+    // This will reload the page with the new locale in the URL
+    router.replace(`/${newLang}${pathname.startsWith('/') ? '' : '/'}${pathname.replace(/^\/(en|kh)/, '')}`);
+  };
 
   const displayName = name && name.trim() ? name : "User";
   const displayEmail = email && email.trim() ? email : "user@example.com";
@@ -42,12 +62,7 @@ export default function ProfileMenuUp({ name, email }: Props) {
       </button>
       {open && (
         <div
-          className={`
-            absolute left-full top-1/2 -translate-y-1/2 ml-2
-            w-64 max-w-[90vw]
-            bg-white rounded-xl shadow-xl border z-50 animate-fade-in-up
-            p-0
-          `}
+          className="absolute left-full top-1/2 -translate-y-1/2 ml-2 w-64 max-w-[90vw] bg-white rounded-xl shadow-xl border z-50 animate-fade-in-up p-0"
           style={{ minWidth: 220 }}
         >
           <div className="p-4 border-b">
@@ -94,20 +109,14 @@ export default function ProfileMenuUp({ name, email }: Props) {
               <div className="absolute right-0 top-12 mt-1 w-32 bg-white border rounded shadow z-50">
                 <button
                   className="w-full flex items-center gap-2 px-3 py-2 hover:bg-gray-100"
-                  onClick={() => {
-                    setLang("en");
-                    setLangDropdown(false);
-                  }}
+                  onClick={() => handleLangChange("en")}
                 >
                   <span role="img" aria-label="UK Flag">🇬🇧</span>
                   <span>EN</span>
                 </button>
                 <button
                   className="w-full flex items-center gap-2 px-3 py-2 hover:bg-gray-100"
-                  onClick={() => {
-                    setLang("kh");
-                    setLangDropdown(false);
-                  }}
+                  onClick={() => handleLangChange("kh")}
                 >
                   <span role="img" aria-label="Cambodia Flag">🇰🇭</span>
                   <span>KH</span>
