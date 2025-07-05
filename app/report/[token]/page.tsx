@@ -22,6 +22,8 @@ export default function ReportViewPage() {
   if (error) return <div className="text-red-500">{error}</div>;
   if (!report) return <div>Loading...</div>;
 
+  console.log("Report data:", report);
+
   const student = report.student || {};
   const score = report.score || {};
   const subjects = Object.entries(score).filter(
