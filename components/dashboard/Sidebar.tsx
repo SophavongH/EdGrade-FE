@@ -15,7 +15,7 @@ const Sidebar = ({ session }: { session: Session }) => {
   const pathname = usePathname();
 
   return (
-    <div className="sticky left-0 top-0 flex h-dvh flex-col justify-between bg-white px-5 pb-5 pt-10 max-md:w-24 max-md:px-1 overflow-visible">
+    <div className="sticky left-0 top-0 flex h-dvh flex-col justify-between bg-white px-5 pb-5 pt-10 max-md:w-20 max-md:px-2">
       <div>
         {/* Logo Section */}
         <div className="flex flex-row items-center gap-2 border-b border-dashed pb-10 max-md:justify-center">
@@ -67,22 +67,18 @@ const Sidebar = ({ session }: { session: Session }) => {
       </div>
 
       {/* User Profile Section */}
-      <div className="w-full flex flex-col items-center mt-8 relative">
-        {/* ChevronUp menu trigger */}
-        <div className="flex justify-center w-full">
-          <ProfileMenuUp
-            name={session?.user?.name}
-            email={session?.user?.email}
-          />
-        </div>
-        {/* Avatar and user info */}
-        <div className="flex flex-col items-center gap-2 mt-2 w-full">
-          <Avatar className="h-12 w-12">
-            <AvatarFallback className="flex h-12 w-12 items-center justify-center rounded-full bg-orange-100 text-lg font-semibold text-black">
-              {getInitials(session?.user?.name || session?.user?.email || "IN")}
-            </AvatarFallback>
-          </Avatar>
-          <div className="flex flex-col items-center min-w-0 flex-1">
+      <div className="w-full flex justify-center mt-8">
+        <div className="flex items-center gap-3 rounded-2xl bg-white shadow-lg px-4 py-3 border border-gray-100 w-[95%] mx-auto transition-all duration-150">
+          {/* Avatar */}
+          <div className="relative">
+            <Avatar className="h-9 w-9">
+              <AvatarFallback className="flex h-9 w-9 items-center justify-center rounded-full bg-orange-100 text-base font-semibold text-black">
+                {getInitials(session?.user?.name || session?.user?.email || "IN")}
+              </AvatarFallback>
+            </Avatar>
+          </div>
+          {/* User info */}
+          <div className="flex flex-col min-w-0 flex-1">
             <p className="truncate text-[15px] font-semibold text-gray-900 leading-5">
               {session?.user?.name || "User"}
             </p>
@@ -90,6 +86,11 @@ const Sidebar = ({ session }: { session: Session }) => {
               {session?.user?.email}
             </p>
           </div>
+          {/* Open menu button */}
+          <ProfileMenuUp
+            name={session?.user?.name}
+            email={session?.user?.email}
+          />
         </div>
       </div>
     </div>
