@@ -44,11 +44,16 @@ export default function ProfileMenuUp({ name, email }: Props) {
         <div
           className={`
             z-50 animate-fade-in-up
-            bg-white border shadow-lg
-            rounded-lg absolute left-1/2 bottom-full -translate-x-1/2 mb-4 w-64
+            absolute left-1/2 bottom-full -translate-x-1/2 mb-4 w-64 bg-white rounded-lg shadow-lg border
+            md:fixed md:left-1/2 md:bottom-auto md:top-auto
             max-md:fixed max-md:left-0 max-md:bottom-0 max-md:w-screen max-md:rounded-none max-md:mb-0 max-md:shadow-none
           `}
-          style={{ minWidth: 260 }}
+          style={{
+            minWidth: 260,
+            ...(window.innerWidth < 768
+              ? { left: 0, right: 0, width: "100vw", borderRadius: 0, marginBottom: 0 }
+              : {}),
+          }}
         >
           <div className="p-4 border-b">
             <div className="font-bold">{displayName}</div>
