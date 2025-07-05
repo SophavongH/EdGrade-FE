@@ -43,10 +43,12 @@ export default function ProfileMenuUp({ name, email }: Props) {
       {open && (
         <div
           className={`
-            absolute left-full top-1/2 -translate-y-1/2 ml-2 w-64 bg-white rounded-lg shadow-lg border z-50 animate-fade-in-up
-            max-md:fixed max-md:left-0 max-md:bottom-0 max-md:w-screen max-md:rounded-none max-md:mb-0 max-md:shadow-none
+            absolute left-full top-1/2 -translate-y-1/2 ml-2
+            w-64 max-w-[90vw]
+            bg-white rounded-xl shadow-xl border z-50 animate-fade-in-up
+            p-0
           `}
-          style={{ minWidth: 260 }}
+          style={{ minWidth: 220 }}
         >
           <div className="p-4 border-b">
             <div className="font-bold">{displayName}</div>
@@ -61,16 +63,17 @@ export default function ProfileMenuUp({ name, email }: Props) {
           >
             <span>
               <UserRoundPen className="w-5 h-5" />
-            </span> Edit profile
+            </span>
+            Edit profile
           </button>
           {/* Language Dropdown */}
           <div className="w-full px-4 py-3 flex items-center gap-3 relative">
             <span className="font-semibold text-gray-700 flex items-center gap-1">
-                <Languages className="w-4 h-4 mr-1" />
+              <Languages className="w-4 h-4 mr-1" />
               Language
             </span>
             <button
-              className="ml-auto flex items-center gap-2 px-3 py-2 rounded  hover:bg-gray-200 transition"
+              className="ml-auto flex items-center gap-2 px-3 py-2 rounded hover:bg-gray-200 transition"
               onClick={() => setLangDropdown((v) => !v)}
               aria-label="Select language"
               type="button"
