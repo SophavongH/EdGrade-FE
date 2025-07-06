@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 
 const page = () => {
-  redirect("/login");
+  redirect("/[locale]/login");
   return null;
 }
 
