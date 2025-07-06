@@ -2,5 +2,5 @@ import { redirect } from "next/navigation";
 
 export default function Page({ params }: { params: { locale: string } }) {
   redirect(`/${params.locale}/login`);
-  return null;
+  // No need to return anything
 }
