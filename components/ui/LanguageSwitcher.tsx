@@ -2,10 +2,31 @@
 // Update the import path below to the correct relative path if needed
 import { useLanguage } from "../../lib/LanguageProvider";
 import { useState, useRef, useEffect } from "react";
+import Image from "next/image";
 
 const LANGUAGES = [
-  { code: "en", label: "English", flag: "🇺🇸" },
-  { code: "kh", label: "ភាសាខ្មែរ", flag: "🇰🇭" },
+  {
+    code: "en",
+    label: "English",
+    flag: (
+      <Image
+        src="/icons/united-kingdom.svg"
+        alt="English"
+        width={24}
+        height={24}
+        style={{ display: "inline-block" }}
+      />
+    ),
+  },
+  { code: "kh", label: "Khmer", flag: (
+      <Image
+        src="/icons/world.svg"
+        alt="Khmer"
+        width={24}
+        height={24}
+        style={{ display: "inline-block" }}
+      />
+    ), },
 ];
 
 export default function LanguageSwitcher() {
