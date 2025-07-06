@@ -52,5 +52,13 @@
   "ranking": "Ranking",
   "digitalAcademicSystem": "Digital Academic Information System",
   "welcomeBack": "Welcome back to EdGrade",
-  "loginToAccount": "Login to your EdGrade Account"
+  "loginToAccount": "Login to your EdGrade Account",
+  "failedToUpdateSchool": "Failed to update school information",
+  "editSchool": "Edit School",
+  "loading": "Loading...",
+  "failedToCreateUser": "Failed to create user",
+  "createNewSchool": "Create New School",
+  "active": "Active",
+  "deactivate": "Deactivate",
+  "school": "School"
 }

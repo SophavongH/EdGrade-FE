@@ -50,7 +50,14 @@
   "average": "មធ្យមភាគ",
   "grade": "និទ្ទេស",
   "ranking": "ចំណាត់ថ្នាក់",
-  "digitalAcademicSystem": "Digital Academic Information System",
   "welcomeBack": "ស្វាគមន៍នៃត្រលប់​មកកាន EdGrade",
-  "loginToAccount": "Login to your EdGrade Account"
+  "loginToAccount": "ចូលទៅក្នុងគណនី EdGrade របស់អ្នក",
+  "failedToUpdateSchool": "ការធ្វើបច្ចុប្បន្នភាពព័ត៌មានសាលា បានបរាជ័យ",
+  "editSchool": "កែប្រែសាលា",
+  "loading": "កំពុងដំណើរការ...",
+  "failedToCreateUser": "ការបង្កើត​អ្នកប្រើប្រាស់ បានបរាជ័យ",
+  "createNewSchool": "បង្កើតសាលាថ្មី",
+  "active": "សកម្ម",
+  "deactivate": "អសកម្ម",
+  "school": "សាលា"
 }
