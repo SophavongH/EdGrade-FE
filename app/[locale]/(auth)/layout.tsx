@@ -1,7 +1,10 @@
 import { ReactNode } from 'react';
 import Image from 'next/image';
+import { useTranslations } from 'next-intl';
 
-const layout = ({ children }: { children: ReactNode }) => {
+const Layout = ({ children }: { children: ReactNode }) => {
+  const t = useTranslations();
+
   return (
     <div className="flex min-h-screen w-full items-center justify-center p-6 md:p-10 bg-[#EDF1F1]">
       {/* left side logo Card */}
@@ -15,7 +18,7 @@ const layout = ({ children }: { children: ReactNode }) => {
             height={120}
           />
           <p className="text-gray-600 text-xl text-center max-w-sm">
-            Digital Academic Information System
+            {t('digitalAcademicSystem')}
           </p>
         </div>
       </div>
@@ -25,10 +28,10 @@ const layout = ({ children }: { children: ReactNode }) => {
           {/* Header */}
           <div className="text-center mb-8">
             <h1 className="text-2xl font-bold text-gray-900 mb-2">
-              Welcome back to EdGrade
+              {t('welcomeBack')}
             </h1>
             <p className="text-sm text-gray-600">
-              Login to your EdGrade Account
+              {t('loginToAccount')}
             </p>
           </div>
 
@@ -41,4 +44,4 @@ const layout = ({ children }: { children: ReactNode }) => {
   );
 };
 
-export default layout;
+export default Layout;

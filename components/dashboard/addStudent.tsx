@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { X, CheckCircle, Search } from "lucide-react";
 import { Button } from "../ui/button";
 import Image from "next/image";
-import type { Student } from "@/app/(dashboard)/school/student/page";
+import type { Student } from "@/types/student";
 
 type Props = {
   open: boolean;

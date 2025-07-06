@@ -4,18 +4,7 @@ import { fetchStudents } from "@/lib/api";
 import StudentTable from "@/components/dashboard/studentTable";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-
-export type Student = {
-  id: string;
-  studentId: string;
-  name: string;
-  avatar?: string;
-  phone: string;
-  gender: "Male" | "Female";
-  parentPhone: string;
-  dob?: string;
-  address?: string;
-};
+import type { Student } from "@/types/student";
 
 export default function StudentPage() {
   const [students, setStudents] = useState<Student[]>([]);

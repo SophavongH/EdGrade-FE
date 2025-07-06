@@ -49,5 +49,8 @@
   "total": "Total",
   "average": "Average",
   "grade": "Grade",
-  "ranking": "Ranking"
+  "ranking": "Ranking",
+  "digitalAcademicSystem": "Digital Academic Information System",
+  "welcomeBack": "Welcome back to EdGrade",
+  "loginToAccount": "Login to your EdGrade Account"
 }

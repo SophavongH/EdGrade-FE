@@ -2,7 +2,7 @@
 import AuthForm from '@/components/ui/AuthForm'
 
 
-const login = () => {
+const Login = () => {
   return (
     
       <AuthForm />
@@ -10,4 +10,4 @@ const login = () => {
   )
 }
 
-export default login
+export default Login

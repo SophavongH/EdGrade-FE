@@ -12,6 +12,7 @@ import {
   deleteCustomSubject,
 } from "@/lib/api";
 import { useParams } from "next/navigation";
+import type { Student } from "@/types/student";
 
 const DEFAULT_SUBJECTS = [
   "Khmer Literature",
@@ -21,12 +22,6 @@ const DEFAULT_SUBJECTS = [
   "Biology",
   "History",
 ];
-
-type Student = {
-  id: string;
-  name: string;
-  avatar?: string;
-};
 
 type ReportCard = {
   id: string | number;

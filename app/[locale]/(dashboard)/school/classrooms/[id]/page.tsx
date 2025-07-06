@@ -16,9 +16,7 @@ import AddStudentModal from "@/components/dashboard/addStudent";
 import CreateReportCardModal from "@/components/dashboard/createReportCard";
 import { Pencil, Trash } from "lucide-react";
 import Link from "next/link";
-
-
-import type { Student } from "@/app/(dashboard)/school/student/page";
+import type { Student } from "@/types/student";
 
 type ReportCard = {
   id: number;
@@ -184,7 +182,7 @@ const Page = () => {
                       strokeLinecap="round"
                     />
                   </svg>
-                  Add Student To Classroom 
+                  Add Student To Classroom
                 </Button>
               )}
             </div>

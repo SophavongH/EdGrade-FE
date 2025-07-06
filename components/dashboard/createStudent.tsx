@@ -3,7 +3,7 @@ import React, { useState, useRef } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { createStudent } from "@/lib/api";
-import type { Student } from "@/app/(dashboard)/school/student/page";
+import type { Student } from "@/types/student";
 
 type Props = {
   setStudents: React.Dispatch<React.SetStateAction<Student[]>>;
