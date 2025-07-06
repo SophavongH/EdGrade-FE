@@ -4,20 +4,20 @@ import { notFound } from "next/navigation";
 
 export default async function LocaleLayout({
   children,
-  params: { locale },
+  params,
 }: {
   children: ReactNode;
   params: { locale: string };
 }) {
   let messages;
   try {
-    messages = (await import(`../../i18n/${locale}.json`)).default;
+    messages = (await import(`../../i18n/${params.locale}.json`)).default;
   } catch {
     notFound();
   }
 
   return (
-    <NextIntlClientProvider locale={locale} messages={messages}>
+    <NextIntlClientProvider locale={params.locale} messages={messages}>
       {children}
     </NextIntlClientProvider>
   );
