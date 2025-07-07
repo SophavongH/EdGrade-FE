@@ -1,7 +1,7 @@
 {
   "welcome": "ស្វាគមន៍",
   "logout": "ចាកចេញ",
-  "editProfile": "កែប្រែ",
+  "editProfile": "កែប្រែ​​ប្រវត្តិរូប",
   "home": "ទំព័រដើម",
   "allClassrooms": "ថ្នាក់ទាំងអស់",
   "allStudents": "សិស្សទាំងអស់",
@@ -129,7 +129,7 @@
   "deleteSchoolConfirm": "តើអ្នកប្រាកដជាចង់លុបសាលានេះទេ?",
   "failedToDeleteSchool": "ការលុបសាលាបានបរាជ័យ",
   "failedToUpdateStatus": "ការធ្វើបច្ចុប្បន្នភាពស្ថានភាពបានបរាជ័យ",
-   "enterSchoolName": "បំពេញឈ្មោះសាលា",
+  "enterSchoolName": "បំពេញឈ្មោះសាលា",
   "enterEmail": "បំពេញអ៊ីម៉ែល",
   "enterPassword": "បំពេញពាក្យសម្ងាត់",
   "enterConfirmPassword": "បំពេញពាក្យសម្ងាត់ម្ដងទៀត",
@@ -145,5 +145,17 @@
   "login": "ចូល",
   "loginSuccess": "ចូលដោយជោគជ័យ",
   "loginFailed": "ចូលបានបរាជ័យ",
-  "accountSuspended": "គណនីរបស់អ្នកត្រូវបានផ្អាក។ សូមទំនាក់ទំនងការគាំទ្រ។"
+  "accountSuspended": "គណនីរបស់អ្នកត្រូវបានផ្អាក។ សូមទំនាក់ទំនងការគាំទ្រ។",
+  "archivedClassroom": "ថ្នាក់ដែលបានរក្សា",
+  "back": "ត្រឡប់ក្រោយ",
+  "dob": "ថ្ងៃខែឆ្នាំកំណើត",
+  "parentPhone": "លេខទូរស័ព្ទឪពុកម្តាយ",
+  "khmerLiturature": "អក្សរសាស្ត្រខ្មែរ",
+  "biology": "ជីវវិទ្យា",
+  "chemistry": "គីមីវិទ្យា",
+  "physics": "រូបវិទ្យា",
+  "mathematics": "គណិតវិទ្យា",
+  "history": "ប្រវត្តិសាស្ត្រ",
+  "students": "សិស្ស",
+  "classrooms": "ថ្នាក់រៀន"
 }

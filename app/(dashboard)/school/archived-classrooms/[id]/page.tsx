@@ -14,8 +14,6 @@ type Classroom = {
   totalStudents: number;
 };
 
-
-
 type ReportCard = {
   id: number;
   title: string;
@@ -33,6 +31,7 @@ export default function ArchivedClassroomDetailPage() {
   const [students, setStudents] = useState<Student[]>([]);
   const [reportCards, setReportCards] = useState<ReportCard[]>([]);
   const [loading, setLoading] = useState(true);
+  const [tab, setTab] = useState<"students" | "reportCards">("students");
 
   useEffect(() => {
     async function loadData() {
@@ -86,30 +85,48 @@ export default function ArchivedClassroomDetailPage() {
           <Button variant="secondary">{t("back")}</Button>
         </Link>
       </div>
-      <div className="mb-8">
-        <h3 className="font-semibold text-lg mb-2">{t("students")}</h3>
-        <StudentTable students={students} setStudents={() => {}} />
+      {/* Tabs */}
+      <div className="flex border-b mb-6">
+        <button
+          className={`px-4 py-2 font-semibold ${tab === "students" ? "border-b-2 border-blue-600 text-blue-600" : "text-gray-400"}`}
+          onClick={() => setTab("students")}
+        >
+          {t("students")}
+        </button>
+        <button
+          className={`ml-4 px-4 py-2 font-semibold ${tab === "reportCards" ? "border-b-2 border-blue-600 text-blue-600" : "text-gray-400"}`}
+          onClick={() => setTab("reportCards")}
+        >
+          {t("reportCard")}
+        </button>
       </div>
-      <div>
-        <h3 className="font-semibold text-lg mb-2">{t("reportCard")}</h3>
-        {reportCards.length === 0 ? (
-          <div className="text-gray-400">{t("noReportCardsYet")}</div>
-        ) : (
-          <ul className="divide-y">
-            {reportCards.map((rc) => (
-              <li key={rc.id} className="py-2 flex items-center justify-between">
-                <span>{rc.title}</span>
-                <Link
-                  href={`/school/classrooms/${classroom.id}/report-cards/${rc.id}`}
-                  className="text-blue-600 hover:underline"
-                >
-                  {t("view")}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+      {/* Tab Content */}
+      {tab === "students" && (
+        <div className="mb-8">
+          <StudentTable students={students} setStudents={() => {}} />
+        </div>
+      )}
+      {tab === "reportCards" && (
+        <div>
+          {reportCards.length === 0 ? (
+            <div className="text-gray-400">{t("noReportCardsYet")}</div>
+          ) : (
+            <ul className="divide-y">
+              {reportCards.map((rc) => (
+                <li key={rc.id} className="py-2 flex items-center justify-between">
+                  <span>{rc.title}</span>
+                  <Link
+                    href={`/school/classrooms/${classroom.id}/report-cards/${rc.id}`}
+                    className="text-blue-600 hover:underline"
+                  >
+                    {t("view")}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
     </section>
   );
 }

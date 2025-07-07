@@ -146,5 +146,16 @@
   "login": "Login",
   "loginSuccess": "Login successful",
   "loginFailed": "Login failed",
-  "accountSuspended": "Your account has been suspended. Please contact support."
+  "accountSuspended": "Your account has been suspended. Please contact support.",
+  "back": "Back",
+  "dob": "Date of Birth",
+  "parentPhone": "Parent's Phone Number",
+  "khmerLiturature": "Khmer Literature",
+  "biology": "Biology",
+  "chemistry": "Chemistry",
+  "physics": "Physics",
+  "mathematics": "Mathematics",
+  "history": "History",
+  "students": "Students",
+  "classrooms": "Classrooms"
 }
