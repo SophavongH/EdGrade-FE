@@ -10,9 +10,11 @@ import type { Session } from "@/lib/user";
 import { usePathname } from "next/navigation";
 import { superAdminSideBarLinks } from "@/constants";
 import ProfileMenuUp from "./profileMenuUp";
+import { useLanguage } from "@/lib/LanguageProvider";
 
 const Sidebar = ({ session }: { session: Session }) => {
   const pathname = usePathname();
+  const { t } = useLanguage();
 
   return (
     <div className="sticky left-0 top-0 flex h-dvh flex-col justify-between bg-white px-5 pb-5 pt-10 max-md:w-20 max-md:px-2">
@@ -53,7 +55,7 @@ const Sidebar = ({ session }: { session: Session }) => {
                 >
                   <Image
                     src={link.img}
-                    alt={link.text}
+                    alt={t(link.text)}
                     width={20}
                     height={20}
                     className={isSelected ? "brightness-0 invert" : ""}

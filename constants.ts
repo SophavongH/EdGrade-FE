@@ -11,29 +11,29 @@ export const adminSideBarLinks = [
   {
     img: "/icons/admin/home.svg",
     route: "/school",
-    text: "Home",
+    text: "home",
   },
   {
     img: "/icons/admin/users.svg",
     route: "/school/student",
-    text: "All Students",
+    text: "allStudents",
   },
   {
     img: "/icons/admin/book.svg",
     route: "/school/classrooms",
-    text: "All Classrooms",
+    text: "allClassrooms",
   },
   {
     img: "/icons/admin/bookmark.svg",
     route: "/school/archived",
-    text: "Archive Classrooms",
+    text: "archiveClassrooms",
   },
-  
 ];
+
 export const superAdminSideBarLinks = [
   {
     img: "/icons/admin/home.svg",
     route: "/admin",
-    text: "Home",
+    text: "home",
   },
 ];

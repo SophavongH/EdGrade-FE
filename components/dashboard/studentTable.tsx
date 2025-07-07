@@ -6,11 +6,12 @@ import { removeStudentFromClassroom, deleteStudent } from "@/lib/api";
 import type { Student } from "@/types/student";
 import { Pencil, Trash } from "lucide-react";
 import Link from "next/link";
+import { useLanguage } from "@/lib/LanguageProvider";
 
 type Props = {
   students: Student[];
   setStudents: React.Dispatch<React.SetStateAction<Student[]>>;
-  classroomId?: string | number; // <-- Add this prop
+  classroomId?: string | number;
 };
 
 const ITEMS_PER_PAGE = 8;
@@ -24,6 +25,7 @@ export default function StudentTable({ students, setStudents, classroomId }: Pro
   // Modal state
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
+  const { t } = useLanguage();
 
   const handleDelete = (student: Student) => {
     setSelectedStudent(student);
@@ -50,11 +52,11 @@ export default function StudentTable({ students, setStudents, classroomId }: Pro
         <table className="min-w-full text-sm text-left">
           <thead className="bg-gray-50 text-gray-600 uppercase text-xs hidden sm:table-header-group">
             <tr>
-              <th className="px-6 py-4 ">Name</th>
-              <th className="px-6 py-4 ">Student ID</th>
-              <th className="px-6 py-4 ">Sex</th>
-              <th className="px-6 py-4 ">Parent&#39;s Phone Number</th>
-              <th className="px-6 py-4 ">Action</th>
+              <th className="px-6 py-4 ">{t("name")}</th>
+              <th className="px-6 py-4 ">{t("studentId")}</th>
+              <th className="px-6 py-4 ">{t("sex")}</th>
+              <th className="px-6 py-4 ">{t("parentPhoneNumber")}</th>
+              <th className="px-6 py-4 ">{t("action")}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100 bg-white">
@@ -95,7 +97,7 @@ export default function StudentTable({ students, setStudents, classroomId }: Pro
                         : "bg-pink-100 text-pink-600"
                     }`}
                   >
-                    {student.gender}
+                    {t(student.gender === "Male" ? "male" : "female")}
                   </span>
                 </td>
                 <td className="px-6 py-4">{student.parentPhone}</td>
@@ -104,7 +106,7 @@ export default function StudentTable({ students, setStudents, classroomId }: Pro
                     <Link href={`/school/student/${student.id}/editStudents`}>
                       <button
                         className="text-blue-500 hover:text-blue-700 p-2 rounded-full hover:bg-blue-50 transition"
-                        title="Edit"
+                        title={t("edit")}
                         type="button"
                       >
                         <Pencil size={18} />
@@ -113,7 +115,7 @@ export default function StudentTable({ students, setStudents, classroomId }: Pro
                     <button
                       onClick={() => handleDelete(student)}
                       className="text-red-500 hover:text-red-700 p-2 rounded-full hover:bg-red-50 transition"
-                      title="Delete"
+                      title={t("delete")}
                     >
                       <Trash size={18} />
                     </button>
@@ -130,10 +132,10 @@ export default function StudentTable({ students, setStudents, classroomId }: Pro
           onClick={() => setCurrentPage((p: number) => Math.max(p - 1, 1))}
           disabled={currentPage === 1}
         >
-          Previous
+          {t("previous")}
         </Button>
         <span className="text-sm text-gray-600">
-          Page {currentPage} of {totalPages}
+          {t("page")} {currentPage} {t("of")} {totalPages}
         </span>
         <Button
           className="bg-[#25388C] hover:bg-[#1e2e6d]"
@@ -142,18 +144,16 @@ export default function StudentTable({ students, setStudents, classroomId }: Pro
           }
           disabled={currentPage === totalPages}
         >
-          Next
+          {t("next")}
         </Button>
       </div>
-
-      {/* Edit Modal */}
 
       {/* Delete Modal */}
       {deleteModalOpen && selectedStudent && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
           <div className="bg-white p-6 rounded-lg shadow-md w-[90%] max-w-sm text-center">
             <p className="font-semibold text-gray-800 mb-6">
-              Are you sure you want to delete ?
+              {t("deleteStudentConfirm")}
             </p>
             <div className="flex justify-center gap-4 ">
               <Button
@@ -161,10 +161,10 @@ export default function StudentTable({ students, setStudents, classroomId }: Pro
                 variant="secondary"
                 onClick={() => setDeleteModalOpen(false)}
               >
-                Cancel
+                {t("cancel")}
               </Button>
               <Button variant="destructive" onClick={confirmDelete}>
-                Delete
+                {t("delete")}
               </Button>
             </div>
           </div>

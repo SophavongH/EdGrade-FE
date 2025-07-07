@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { createStudent } from "@/lib/api";
 import type { Student } from "@/types/student";
+import { useLanguage } from "@/lib/LanguageProvider";
 
 type Props = {
   setStudents: React.Dispatch<React.SetStateAction<Student[]>>;
@@ -20,6 +21,7 @@ const CreateStudent: React.FC<Props> = ({ setStudents }) => {
     parentPhone: "",
     phone: "",
   });
+  const { t } = useLanguage();
 
   const handleImageClick = () => {
     fileInputRef.current?.click();
@@ -70,7 +72,7 @@ const CreateStudent: React.FC<Props> = ({ setStudents }) => {
         {image ? (
           <Image
             src={image}
-            alt="Profile"
+            alt={t("profile")}
             width={144}
             height={144}
             className="w-full h-full object-cover"
@@ -90,66 +92,66 @@ const CreateStudent: React.FC<Props> = ({ setStudents }) => {
       {/* Form */}
       <form className="w-full max-w-2xl space-y-4" onSubmit={handleSubmit}>
         <div>
-          <label className="block mb-1">Name:</label>
+          <label className="block mb-1">{t("name")}:</label>
           <input
             name="name"
             value={form.name}
             onChange={handleChange}
             className="w-full rounded border px-4 py-2"
-            placeholder="Enter name"
+            placeholder={t("enterName")}
           />
         </div>
         <div className="flex gap-4">
           <div className="flex-1">
-            <label className="block mb-1">Date of Birth</label>
+            <label className="block mb-1">{t("dateOfBirth")}</label>
             <input
               type="date"
               name="dob"
               value={form.dob}
               onChange={handleChange}
               className="w-full rounded border px-4 py-2"
-              placeholder="Select date"
+              placeholder={t("selectDate")}
             />
           </div>
           <div className="flex-1">
-            <label className="block mb-1">Sex</label>
+            <label className="block mb-1">{t("sex")}</label>
             <select
               name="gender"
               value={form.gender}
               onChange={handleChange}
               className="w-full rounded border px-4 py-2"
             >
-              <option value="">Select</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
+              <option value="">{t("select")}</option>
+              <option value="male">{t("male")}</option>
+              <option value="female">{t("female")}</option>
             </select>
           </div>
         </div>
         <div>
-          <label className="block mb-1">Address</label>
+          <label className="block mb-1">{t("address")}</label>
           <input
             name="address"
             value={form.address}
             onChange={handleChange}
             className="w-full rounded border px-4 py-2"
-            placeholder="Enter address"
+            placeholder={t("enterAddress")}
           />
         </div>
         <div>
-          <label className="block mb-1">Parent&#39;s Phone Number</label>
+          <label className="block mb-1">{t("parentPhoneNumber")}</label>
           <input
             name="parentPhone"
             value={form.parentPhone}
             onChange={handleChange}
             className="w-full rounded border px-4 py-2"
-            placeholder="Enter phone number"
+            placeholder={t("enterPhoneNumber")}
           />
         </div>
         <Button
           type="submit"
           className="w-full bg-[#25388C] hover:bg-[#1e2e6d] text-white text-lg"
         >
-          Create
+          {t("create")}
         </Button>
       </form>
     </section>

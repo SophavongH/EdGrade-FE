@@ -6,31 +6,31 @@ import kh from "@/i18n/kh.json";
 type Messages = Record<string, string>;
 const messages: Record<"en" | "kh", Messages> = { en, kh };
 
-type Locale = "en" | "kh";
+type Lang = "en" | "kh";
 type LanguageContextType = {
-  locale: Locale;
-  setLocale: (locale: Locale) => void;
+  lang: Lang;
+  setLang: (lang: Lang) => void;
   t: (key: string) => string;
 };
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export const LanguageProvider = ({ children }: { children: React.ReactNode }) => {
-  const [locale, setLocale] = useState<Locale>(() => {
+  const [lang, setLang] = useState<Lang>(() => {
     if (typeof window !== "undefined") {
-      return (localStorage.getItem("lang") as Locale) || "en";
+      return (localStorage.getItem("lang") as Lang) || "en";
     }
     return "en";
   });
 
   useEffect(() => {
-    localStorage.setItem("lang", locale);
-  }, [locale]);
+    localStorage.setItem("lang", lang);
+  }, [lang]);
 
-  const t = (key: string) => messages[locale][key] || key;
+  const t = (key: string) => messages[lang][key] || key;
 
   return (
-    <LanguageContext.Provider value={{ locale, setLocale, t }}>
+    <LanguageContext.Provider value={{ lang, setLang, t }}>
       {children}
     </LanguageContext.Provider>
   );

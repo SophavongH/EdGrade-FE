@@ -1,9 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import { useEffect, useState } from "react";
 import { X, CheckCircle, Search } from "lucide-react";
 import { Button } from "../ui/button";
 import Image from "next/image";
 import type { Student } from "@/types/student";
+import { useLanguage } from "@/lib/LanguageProvider";
 
 type Props = {
   open: boolean;
@@ -26,8 +29,8 @@ export default function AddStudentModal({
   const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
   const [error, setError] = useState<string | null>(null);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [alreadyAdded, setAlreadyAdded] = useState<{ id: string; name: string }[]>([]);
+  const { t } = useLanguage();
 
   useEffect(() => {
     if (open) {
@@ -55,15 +58,13 @@ export default function AddStudentModal({
       if (result.alreadyAdded && result.alreadyAdded.length > 0) {
         setAlreadyAdded(result.alreadyAdded);
         setError(
-          `The Student is already added៖ ${result.alreadyAdded.map(s => s.name).join(", ")}`
+          t("studentAlreadyAdded") + "៖ " + result.alreadyAdded.map(s => s.name).join(", ")
         );
       } else {
         onClose();
       }
-    
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
-      setError(err?.error || "Successfully added students");
+      setError(err?.error || t("successfullyAddedStudents"));
     }
     setLoading(false);
   };
@@ -90,7 +91,7 @@ export default function AddStudentModal({
             className="text-2xl font-bold text-[#25388C] text-center"
             style={{ fontFamily: "inherit", letterSpacing: 1 }}
           >
-            Add Students
+            {t("addStudents")}
           </h2>
         </div>
         {/* Search box */}
@@ -100,7 +101,7 @@ export default function AddStudentModal({
               type="text"
               value={search}
               onChange={e => setSearch(e.target.value)}
-              placeholder="Searching Student..."
+              placeholder={t("searchingStudent")}
               className="w-full rounded-lg border border-gray-300 px-4 py-2 pl-10 focus:outline-none focus:ring-2 focus:ring-[#25388C] text-base"
             />
             <Search className="absolute left-3 top-2.5 text-gray-400" size={18} />
@@ -118,7 +119,7 @@ export default function AddStudentModal({
         <div className="w-full px-8 pb-0 pt-2">
           {filteredStudents.length === 0 && (
             <div className="text-center text-gray-400 py-8">
-              No students found
+              {t("noStudentsFound")}
             </div>
           )}
           <div className="flex flex-col gap-4 max-h-72 overflow-y-auto">
@@ -176,7 +177,7 @@ export default function AddStudentModal({
             onClick={handleAdd}
             disabled={loading || selected.length === 0}
           >
-            {loading ? "Adding..." : "Add"}
+            {loading ? t("adding") : t("add")}
           </Button>
         </div>
       </div>

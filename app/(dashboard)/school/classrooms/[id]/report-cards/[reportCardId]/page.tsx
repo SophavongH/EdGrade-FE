@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import {
   fetchClassroomStudents,
@@ -13,15 +13,7 @@ import {
 } from "@/lib/api";
 import { useParams } from "next/navigation";
 import type { Student } from "@/types/student";
-
-const DEFAULT_SUBJECTS = [
-  "Khmer Literature",
-  "Mathematics",
-  "Chemistry",
-  "Physics",
-  "Biology",
-  "History",
-];
+import { useLanguage } from "@/lib/LanguageProvider";
 
 type ReportCard = {
   id: string | number;
@@ -43,6 +35,19 @@ export default function ReportCardDetailPage() {
   const params = useParams();
   const classroomId = params.id as string;
   const reportCardId = params.reportCardId as string;
+  const { t } = useLanguage();
+
+  const DEFAULT_SUBJECTS = useMemo(
+    () => [
+      t("khmerLiterature"),
+      t("mathematics"),
+      t("chemistry"),
+      t("physics"),
+      t("biology"),
+      t("history"),
+    ],
+    [t]
+  );
 
   const [students, setStudents] = useState<Student[]>([]);
   const [showSubjectModal, setShowSubjectModal] = useState(false);
@@ -63,7 +68,7 @@ export default function ReportCardDetailPage() {
   // Fetch students
   useEffect(() => {
     if (!classroomId || isNaN(Number(classroomId))) {
-      setError("Invalid classroom ID.");
+      setError(t("invalidClassroomId"));
       return;
     }
     setError(null);
@@ -88,8 +93,8 @@ export default function ReportCardDetailPage() {
           return newScores;
         });
       })
-      .catch(() => setError("Failed to fetch students for this classroom."));
-  }, [classroomId]);
+      .catch(() => setError(t("failedToFetchStudents")));
+  }, [classroomId, t, DEFAULT_SUBJECTS]);
 
   // Fetch report card info for title
   useEffect(() => {
@@ -177,7 +182,7 @@ export default function ReportCardDetailPage() {
         setSelectedSubjects((prev) => [...prev, subject]);
         setNewSubject("");
       } catch {
-        alert("Failed to add subject.");
+        alert(t("failedToAddSubject"));
       } finally {
         setSubjectLoading(false);
       }
@@ -192,7 +197,7 @@ export default function ReportCardDetailPage() {
       setCustomSubjects((prev) => prev.filter((s) => s !== subject));
       setSelectedSubjects((prev) => prev.filter((s) => s !== subject));
     } catch {
-      alert("Failed to remove subject.");
+      alert(t("failedToRemoveSubject"));
     } finally {
       setSubjectLoading(false);
     }
@@ -226,7 +231,6 @@ export default function ReportCardDetailPage() {
       }
 
       // Build the payload with computed fields
-      
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const payload: Record<string, any> = {};
       students.forEach((stu, idx) => {
@@ -245,10 +249,10 @@ export default function ReportCardDetailPage() {
       });
 
       await saveReportCardScores(reportCardId, payload);
-      alert("Successfully saved scores!");
+      alert(t("successfullySavedScores"));
       // eslint-disable-next-line
     } catch (err) {
-      alert("Failed to save scores.");
+      alert(t("failedToSaveScores"));
     } finally {
       setSaving(false);
     }
@@ -261,21 +265,21 @@ export default function ReportCardDetailPage() {
     <section className="w-full rounded-2xl bg-white p-7">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-xl font-semibold">
-          {reportCard?.title || "តារាពិន្ទុ"}
+          {reportCard?.title || t("reportCard")}
         </h1>
         <div className="flex gap-2">
           <Button
             className="bg-[#25388C] hover:bg-[#1e2e6d] text-white"
             onClick={() => setShowSubjectModal(true)}
           >
-            Select Subjects
+            {t("selectSubjects")}
           </Button>
           <Button
             className="bg-[#25388C] hover:bg-[#1e2e6d] text-white"
             onClick={handleSave}
             disabled={saving}
           >
-            {saving ? "Saving..." : "Save"}
+            {saving ? t("saving") : t("save")}
           </Button>
         </div>
       </div>
@@ -291,17 +295,17 @@ export default function ReportCardDetailPage() {
                   onChange={() => setSelectAll((v) => !v)}
                 />
               </th>
-              <th className="px-4 py-3">Name</th>
-              <th className="px-4 py-3">Absent</th>
+              <th className="px-4 py-3">{t("name")}</th>
+              <th className="px-4 py-3">{t("absent")}</th>
               {tableSubjects.map((subject) => (
                 <th key={subject} className="px-4 py-3">
                   {subject}
                 </th>
               ))}
-              <th className="px-4 py-3">Total</th>
-              <th className="px-4 py-3">Average</th>
-              <th className="px-4 py-3">Grade</th>
-              <th className="px-4 py-3">Ranking</th>
+              <th className="px-4 py-3">{t("total")}</th>
+              <th className="px-4 py-3">{t("average")}</th>
+              <th className="px-4 py-3">{t("grade")}</th>
+              <th className="px-4 py-3">{t("ranking")}</th>
             </tr>
           </thead>
           <tbody>
@@ -411,13 +415,13 @@ export default function ReportCardDetailPage() {
                 ? selectedStudentIds
                 : students.map((s) => s.id)
             );
-            alert("SMS sent to parents!");
+            alert(t("smsSentToParents"));
           } catch {
-            alert("Failed to send SMS");
+            alert(t("failedToSendSMS"));
           }
         }}
       >
-        Send
+        {t("send")}
       </Button>
       {/* Subject Selection Modal */}
       {showSubjectModal && (
@@ -430,7 +434,7 @@ export default function ReportCardDetailPage() {
               ×
             </button>
             <div className="font-bold text-lg text-center mb-6">
-              Select Subjects
+              {t("selectSubjects")}
             </div>
             <div className="flex flex-col gap-2 mb-4">
               {[...DEFAULT_SUBJECTS, ...customSubjects].map((subject) => (
@@ -446,7 +450,7 @@ export default function ReportCardDetailPage() {
                       type="button"
                       className="ml-2 text-xs text-red-400 hover:text-red-600"
                       onClick={() => handleRemoveCustomSubject(subject)}
-                      title="Remove custom subject"
+                      title={t("removeCustomSubject")}
                       disabled={subjectLoading}
                     >
                       ×
@@ -461,7 +465,7 @@ export default function ReportCardDetailPage() {
                 type="text"
                 value={newSubject}
                 onChange={(e) => setNewSubject(e.target.value)}
-                placeholder="Add new subject"
+                placeholder={t("addNewSubject")}
                 className="flex-1 border rounded px-2 py-1"
               />
               <button
@@ -470,14 +474,14 @@ export default function ReportCardDetailPage() {
                 onClick={handleAddSubject}
                 disabled={subjectLoading}
               >
-                {subjectLoading ? "Adding..." : "Add"}
+                {subjectLoading ? t("adding") : t("add")}
               </button>
             </div>
             <Button
               className="w-full bg-[#25388C] hover:bg-[#1e2e6d] text-white"
               onClick={() => setShowSubjectModal(false)}
             >
-              Done
+              {t("done")}
             </Button>
           </div>
         </div>

@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
 import { Button } from "../ui/button";
 import { createClassroom } from "@/lib/api"; // Adjust the import path as needed
+import { useLanguage } from "@/lib/LanguageProvider";
 
 type Classroom = {
   id: number;
@@ -34,11 +35,12 @@ export default function CreateClassroomModal({ classrooms, setClassrooms }: Prop
   const [classroomName, setClassroomName] = useState("");
   const [error, setError] = useState("");
   const modalRef = useRef<HTMLDivElement | null>(null);
+  const { t } = useLanguage();
 
   const handleCreate = async () => {
     const trimmedName = classroomName.trim();
     if (trimmedName === "") {
-      setError("Classroom name cannot be empty.");
+      setError(t("classroomNameCannotBeEmpty"));
       return;
     }
 
@@ -47,7 +49,7 @@ export default function CreateClassroomModal({ classrooms, setClassrooms }: Prop
     );
 
     if (isDuplicate) {
-      setError("Classroom name already exists.");
+      setError(t("classroomNameAlreadyExists"));
       return;
     }
 
@@ -81,7 +83,7 @@ export default function CreateClassroomModal({ classrooms, setClassrooms }: Prop
         onClick={() => setIsOpen(true)}
         className="bg-[#25388C] hover:bg-[#1e2e6d] "
       >
-        + Create Classroom
+        + {t("createClassroom")}
       </Button>
 
       {isOpen && (
@@ -101,7 +103,7 @@ export default function CreateClassroomModal({ classrooms, setClassrooms }: Prop
               <X size={20} />
             </button>
             <h2 className="text-lg font-semibold mb-4 text-gray-900">
-              Create Classroom
+              {t("createClassroom")}
             </h2>
             <input
               type="text"
@@ -110,7 +112,7 @@ export default function CreateClassroomModal({ classrooms, setClassrooms }: Prop
                 setClassroomName(e.target.value);
                 setError("");
               }}
-              placeholder="Classroom Name"
+              placeholder={t("classroomName")}
               className="w-full border border-gray-300 rounded-lg px-4 py-2 mb-3 focus:outline-none focus:ring-2 focus:ring-[#25388C] text-base"
             />
             {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
@@ -118,7 +120,7 @@ export default function CreateClassroomModal({ classrooms, setClassrooms }: Prop
               onClick={handleCreate}
               className="bg-[#25388C] hover:bg-[#1e2e6d] text-white w-full py-2 rounded-lg text-base font-medium"
             >
-              Save
+              {t("save")}
             </Button>
           </div>
         </div>

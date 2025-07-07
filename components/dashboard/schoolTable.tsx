@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { PowerOff, Power, Pencil, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { useLanguage } from "@/lib/LanguageProvider";
 
 type School = {
   id: string;
@@ -22,6 +23,7 @@ const SchoolTable: React.FC<SchoolTableProps> = ({ schools, setSchools }) => {
   const [showModal, setShowModal] = useState(false);
   const [selectedSchool, setSelectedSchool] = useState<School | null>(null);
   const [statusChangingId, setStatusChangingId] = useState<string | null>(null);
+  const { t } = useLanguage();
 
   const openDeleteModal = (school: School) => {
     setSelectedSchool(school);
@@ -48,10 +50,9 @@ const SchoolTable: React.FC<SchoolTableProps> = ({ schools, setSchools }) => {
     setShowModal(false);
     setSelectedSchool(null);
     if (res.ok) {
-      // Remove from local state
       setSchools((prev) => prev.filter((s) => s.id !== selectedSchool.id));
     } else {
-      alert("Failed to delete user");
+      alert(t("failedToDeleteSchool"));
     }
   };
 
@@ -71,14 +72,13 @@ const SchoolTable: React.FC<SchoolTableProps> = ({ schools, setSchools }) => {
     );
     setStatusChangingId(null);
     if (res.ok) {
-      // Update status in local state
       setSchools((prev) =>
         prev.map((s) =>
           s.id === school.id ? { ...s, status: newStatus } : s
         )
       );
     } else {
-      alert("Failed to update status");
+      alert(t("failedToUpdateStatus"));
     }
   };
 
@@ -87,11 +87,11 @@ const SchoolTable: React.FC<SchoolTableProps> = ({ schools, setSchools }) => {
       <table className="min-w-full text-sm text-left">
         <thead className="bg-gray-50 text-gray-600 uppercase text-xs">
           <tr>
-            <th className="px-6 py-4">Name</th>
-            <th className="px-6 py-4">Email</th>
-            <th className="px-6 py-4">Date of Created</th>
-            <th className="px-6 py-4">Status</th>
-            <th className="px-6 py-4">Action</th>
+            <th className="px-6 py-4">{t("schoolName")}</th>
+            <th className="px-6 py-4">{t("email")}</th>
+            <th className="px-6 py-4">{t("dateOfCreated")}</th>
+            <th className="px-6 py-4">{t("status")}</th>
+            <th className="px-6 py-4">{t("action")}</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-100 bg-white">
@@ -114,11 +114,11 @@ const SchoolTable: React.FC<SchoolTableProps> = ({ schools, setSchools }) => {
               <td className="px-6 py-4">
                 {school.status !== "deactivated" ? (
                   <span className="bg-green-100 text-green-700 px-2 py-1 rounded">
-                    Active
+                    {t("active")}
                   </span>
                 ) : (
                   <span className="bg-red-100 text-red-700 px-2 py-1 rounded">
-                    Deactivate
+                    {t("deactivated")}
                   </span>
                 )}
               </td>
@@ -130,7 +130,7 @@ const SchoolTable: React.FC<SchoolTableProps> = ({ schools, setSchools }) => {
                     disabled={statusChangingId === school.id}
                   >
                     <PowerOff size={16} />
-                    {statusChangingId === school.id && <span>...</span>}
+                    {statusChangingId === school.id ? <span>...</span> : t("deactivate")}
                   </Button>
                 ) : (
                   <Button
@@ -139,7 +139,7 @@ const SchoolTable: React.FC<SchoolTableProps> = ({ schools, setSchools }) => {
                     disabled={statusChangingId === school.id}
                   >
                     <Power size={16} />
-                    {statusChangingId === school.id && <span>...</span>}
+                    {statusChangingId === school.id ? <span>...</span> : t("activate")}
                   </Button>
                 )}
                 <Button
@@ -147,6 +147,7 @@ const SchoolTable: React.FC<SchoolTableProps> = ({ schools, setSchools }) => {
                   onClick={() => router.push(`/admin/edit/${school.id}`)}
                 >
                   <Pencil size={16} />
+                  {t("edit")}
                 </Button>
                 <Button
                   className="bg-red-100 text-red-700 px-2 py-1 rounded flex items-center gap-1"
@@ -154,7 +155,7 @@ const SchoolTable: React.FC<SchoolTableProps> = ({ schools, setSchools }) => {
                   disabled={deletingId === school.id}
                 >
                   <Trash size={16} />
-                  {deletingId === school.id && <span>Deleting...</span>}
+                  {deletingId === school.id ? <span>{t("deleting")}</span> : t("delete")}
                 </Button>
               </td>
             </tr>
@@ -167,7 +168,7 @@ const SchoolTable: React.FC<SchoolTableProps> = ({ schools, setSchools }) => {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
           <div className="bg-white rounded-lg shadow-lg p-8 min-w-[320px] flex flex-col items-center">
             <div className="font-bold text-lg mb-6 text-center">
-              Are you sure you want to delete ?
+              {t("deleteSchoolConfirm")}
             </div>
             <div className="flex gap-4 w-full justify-center">
               <Button
@@ -175,14 +176,14 @@ const SchoolTable: React.FC<SchoolTableProps> = ({ schools, setSchools }) => {
                 onClick={closeDeleteModal}
                 disabled={deletingId === selectedSchool.id}
               >
-                Cancel
+                {t("cancel")}
               </Button>
               <Button
                 className="bg-red-500 text-white px-6 py-2 rounded font-bold"
                 onClick={handleDelete}
                 disabled={deletingId === selectedSchool.id}
               >
-                Delete
+                {t("delete")}
                 {deletingId === selectedSchool.id && <span>...</span>}
               </Button>
             </div>

@@ -16,6 +16,7 @@ import {
   FormMessage,
   FormControl,
 } from "./form";
+import { useLanguage } from "../../lib/LanguageProvider";
 
 const loginSchema = z.object({
   email: z.string().email(),
@@ -26,36 +27,33 @@ export type LoginType = z.infer<typeof loginSchema>;
 
 export default function AuthForm() {
   const router = useRouter();
+  const { t } = useLanguage();
   const form = useForm<LoginType>({
     resolver: zodResolver(loginSchema),
     defaultValues: { email: "", password: "" },
   });
 
   const onSubmit = async (data: LoginType) => {
-    // Clear previous errors
     form.clearErrors();
     const result = await login(data.email, data.password);
 
-    // Check for suspended account error
     if (result.error === "Account is suspended.") {
-      toast.error("Your account is suspended. Please contact support.");
+      toast.error(t("accountSuspended"));
       return;
     }
 
     if (result.success) {
-      toast.success("Login successful");
-      if (result.token) localStorage.setItem("token", result.token); // <-- ADD THIS LINE
-      if (result.user?.id) localStorage.setItem("userId", result.user.id); // <-- ADD THIS LINE
+      toast.success(t("loginSuccess"));
+      if (result.token) localStorage.setItem("token", result.token);
+      if (result.user?.id) localStorage.setItem("userId", result.user.id);
       router.push(result.role === "admin" ? "/admin" : "/school");
     } else {
-      // Set error on the correct field
       if (result.error?.toLowerCase().includes("email")) {
         form.setError("email", { message: result.error });
       } else if (result.error?.toLowerCase().includes("password")) {
         form.setError("password", { message: result.error });
       } else {
-        // fallback: show as a general error
-        toast.error(result.error || "Login failed");
+        toast.error(result.error || t("loginFailed"));
       }
     }
   };
@@ -71,7 +69,7 @@ export default function AuthForm() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  {FIELD_NAME[field.name as keyof typeof FIELD_NAME]}
+                  {t(FIELD_NAME[field.name as keyof typeof FIELD_NAME])}
                 </FormLabel>
                 <FormControl>
                   <Input
@@ -84,7 +82,7 @@ export default function AuthForm() {
             )}
           />
         ))}
-        <Button type="submit">Log in</Button>
+        <Button type="submit">{t("login")}</Button>
       </form>
     </Form>
   );

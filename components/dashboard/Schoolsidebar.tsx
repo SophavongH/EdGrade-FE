@@ -10,10 +10,11 @@ import type { Session } from "@/lib/user";
 import { adminSideBarLinks } from "@/constants";
 import { usePathname } from "next/navigation";
 import ProfileMenuUp from "./profileMenuUp"; // Add this import
-
+import { useLanguage } from "@/lib/LanguageProvider";
 
 const SchoolSidebar = ({ session }: { session: Session }) => {
   const pathname = usePathname();
+  const { t } = useLanguage();
 
   return (
     <div className="sticky left-0 top-0 flex h-dvh flex-col justify-between bg-white px-5 pb-5 pt-10 max-md:w-20 max-md:px-2">
@@ -56,7 +57,7 @@ const SchoolSidebar = ({ session }: { session: Session }) => {
                 >
                   <Image
                     src={link.img}
-                    alt={link.text}
+                    alt={t(link.text)}
                     width={20}
                     height={20}
                     className={cn(
@@ -64,7 +65,7 @@ const SchoolSidebar = ({ session }: { session: Session }) => {
                       isSelected ? "brightness-0 invert" : ""
                     )}
                   />
-                  <span className="max-md:hidden">{link.text}</span>
+                  <span className="max-md:hidden">{t(link.text)}</span>
                 </div>
               </Link>
             );

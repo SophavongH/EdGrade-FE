@@ -5,6 +5,7 @@ import { Button } from "../ui/button";
 import clsx from "clsx";
 import { updateClassroom, archiveClassroom } from "@/lib/api";
 import Link from "next/link";
+import { useLanguage } from "@/lib/LanguageProvider";
 
 type Classroom = {
   id: number;
@@ -35,6 +36,8 @@ export default function ClassroomTable({ classrooms, setClassrooms }: Props) {
   const [newClassName, setNewClassName] = useState("");
 
   const editModalRef = useRef<HTMLDivElement | null>(null);
+
+  const { t } = useLanguage();
 
   const handleEdit = (classroom: Classroom) => {
     setSelectedClassroom(classroom);
@@ -101,10 +104,10 @@ export default function ClassroomTable({ classrooms, setClassrooms }: Props) {
         <table className="min-w-full text-sm text-left">
           <thead className="bg-gray-50 text-gray-600 uppercase text-xs hidden sm:table-header-group">
             <tr>
-              <th className="px-6 py-4">Classroom Name</th>
-              <th className="px-6 py-4">Total Students</th>
-              <th className="px-6 py-4">View</th>
-              <th className="px-6 py-4">Action</th>
+              <th className="px-6 py-4">{t("classroomName")}</th>
+              <th className="px-6 py-4">{t("totalStudents")}</th>
+              <th className="px-6 py-4">{t("view")}</th>
+              <th className="px-6 py-4">{t("action")}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100 bg-white">
@@ -127,7 +130,7 @@ export default function ClassroomTable({ classrooms, setClassrooms }: Props) {
                     href={`/school/classrooms/${classroom.id}`}
                     className="text-blue-600 hover:underline cursor-pointer"
                   >
-                    View Classroom
+                    {t("viewClassroom")}
                   </Link>
                 </td>
                 <td className="px-6 py-4 flex gap-2">
@@ -156,10 +159,10 @@ export default function ClassroomTable({ classrooms, setClassrooms }: Props) {
           onClick={() => setCurrentPage((p: number) => Math.max(p - 1, 1))}
           disabled={currentPage === 1}
         >
-          Previous
+          {t("previous")}
         </Button>
         <span className="text-sm text-gray-600">
-          Page {currentPage} of {totalPages}
+          {t("page")} {currentPage} {t("of")} {totalPages}
         </span>
         <Button
           className="bg-[#25388C] hover:bg-[#1e2e6d]"
@@ -168,7 +171,7 @@ export default function ClassroomTable({ classrooms, setClassrooms }: Props) {
           }
           disabled={currentPage === totalPages}
         >
-          Next
+          {t("next")}
         </Button>
       </div>
       {/* Edit Modal */}
@@ -182,7 +185,7 @@ export default function ClassroomTable({ classrooms, setClassrooms }: Props) {
             className="bg-white p-6 rounded-lg shadow-md w-[90%] max-w-md"
           >
             <div className="flex justify-between items-center mb-4">
-              <h2 className="font-semibold text-lg">Edit Classroom Name</h2>
+              <h2 className="font-semibold text-lg">{t("editClassroomName")}</h2>
             </div>
             <input
               className="w-full px-4 py-2 border rounded-md mb-4"
@@ -195,7 +198,7 @@ export default function ClassroomTable({ classrooms, setClassrooms }: Props) {
               onClick={confirmEdit}
               className="w-full bg-[#25388C] hover:bg-[#1e2e6d]"
             >
-              Save
+              {t("save")}
             </Button>
           </div>
         </div>
@@ -206,17 +209,17 @@ export default function ClassroomTable({ classrooms, setClassrooms }: Props) {
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center">
           <div className="bg-white p-6 rounded-lg shadow-md w-[90%] max-w-sm text-center">
             <p className="font-semibold text-gray-800 mb-6">
-              Are you sure you want to archive this?
+              {t("archiveConfirm")}
             </p>
             <div className="flex justify-center gap-4">
               <Button
                 variant="secondary"
                 onClick={() => setArchiveModalOpen(false)}
               >
-                Cancel
+                {t("cancel")}
               </Button>
               <Button variant="destructive" onClick={confirmArchive}>
-                Confirm
+                {t("confirm")}
               </Button>
             </div>
           </div>

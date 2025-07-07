@@ -17,6 +17,8 @@ import CreateReportCardModal from "@/components/dashboard/createReportCard";
 import { Pencil, Trash } from "lucide-react";
 import Link from "next/link";
 import type { Student } from "@/types/student";
+import { useLanguage } from "@/lib/LanguageProvider";
+import Image from "next/image";
 
 type ReportCard = {
   id: number;
@@ -32,6 +34,7 @@ const ClassroomName = ({ id }: { id: string }) => {
     name: string;
   } | null>(null);
   const [loading, setLoading] = useState(true);
+  const { t } = useLanguage();
 
   useEffect(() => {
     setLoading(true);
@@ -46,15 +49,22 @@ const ClassroomName = ({ id }: { id: string }) => {
       });
   }, [id]);
 
-  if (loading) return <span className="text-gray-400">Loading...</span>;
+  if (loading)
+    return (
+      <div className="flex flex-col items-center">
+        <Image src="/icons/math.gif" alt="Loading..." width={40} height={40} />
+        <span className="text-gray-400 mt-2">{t("loading")}</span>
+      </div>
+    );
   if (!classroom)
-    return <span className="text-red-500">Classroom Not Found</span>;
+    return <span className="text-red-500">{t("classroomNotFound")}</span>;
   return <span className="text-xl font-semibold">{classroom.name}</span>;
 };
 
 const Page = () => {
   const [tab, setTab] = useState(0);
   const params = useParams();
+  const { t } = useLanguage();
 
   // Modal state
   const [showAddStudentModal, setShowAddStudentModal] = useState(false);
@@ -139,7 +149,7 @@ const Page = () => {
                 }`}
                 onClick={() => setTab(0)}
               >
-                Report Card
+                {t("reportCard")}
               </button>
               <button
                 className={`pb-2 text-base focus:outline-none ${
@@ -149,7 +159,7 @@ const Page = () => {
                 }`}
                 onClick={() => setTab(1)}
               >
-                Students
+                {t("students")}
               </button>
             </div>
             <div>
@@ -166,7 +176,7 @@ const Page = () => {
                       strokeLinecap="round"
                     />
                   </svg>
-                  Create Report Card
+                  {t("createReportCard")}
                 </Button>
               )}
               {tab === 1 && (
@@ -182,7 +192,7 @@ const Page = () => {
                       strokeLinecap="round"
                     />
                   </svg>
-                  Add Student To Classroom
+                  {t("addStudentToClassroom")}
                 </Button>
               )}
             </div>
@@ -196,17 +206,17 @@ const Page = () => {
                   {/* Table Header */}
                   <div className="flex items-center px-4 py-2 bg-[#f7f8ff] rounded-t-xl border-b border-gray-200">
                     <div className="flex-1 font-semibold text-sm text-gray-500">
-                      Report Card
+                      {t("reportCard")}
                     </div>
                     <div className="w-32 text-right font-semibold text-sm text-gray-500">
-                      Action
+                      {t("action")}
                     </div>
                   </div>
                   {/* Table Body */}
                   <div className="divide-y divide-gray-100 bg-white rounded-b-xl">
                     {reportCards.length === 0 && (
                       <div className="text-gray-400 text-center py-8">
-                        No report cards yet.
+                        {t("noReportCardsYet")}
                       </div>
                     )}
                     {reportCards.map((rc) => (
@@ -218,7 +228,7 @@ const Page = () => {
                           <Button
                             asChild
                             className="text-blue-500 hover:text-blue-700 p-2 rounded-full hover:bg-blue-50 transition"
-                            title="Edit"
+                            title={t("edit")}
                             variant="ghost"
                             size="icon"
                           >
@@ -231,7 +241,7 @@ const Page = () => {
                           <Button
                             className="text-red-500 hover:text-red-700 p-2 rounded-full hover:bg-red-50 transition"
                             onClick={() => setDeleteConfirmId(rc.id)}
-                            title="Delete"
+                            title={t("delete")}
                             variant="ghost"
                             size="icon"
                           >
@@ -274,20 +284,20 @@ const Page = () => {
         <div className="fixed inset-0 z-50 bg-black/30 flex items-center justify-center">
           <div className="bg-white rounded-xl p-8 shadow-lg w-[350px] max-w-[90vw] flex flex-col items-center">
             <div className="font-bold text-lg mb-6 text-center">
-              Are you sure you want to delete this report card?
+              {t("deleteReportCardConfirm")}
             </div>
             <div className="flex gap-4 w-full justify-center">
               <Button
                 className="bg-gray-400 hover:bg-gray-500 text-white w-32"
                 onClick={() => setDeleteConfirmId(null)}
               >
-                Cancel
+                {t("cancel")}
               </Button>
               <Button
                 className="bg-red-500 hover:bg-red-600 text-white w-32"
                 onClick={handleDeleteReportCard}
               >
-                Delete
+                {t("delete")}
               </Button>
             </div>
           </div>

@@ -3,6 +3,9 @@
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { fetchArchivedClassrooms, unarchiveClassroom } from "@/lib/api";
+import { useLanguage } from "@/lib/LanguageProvider";
+import Image from "next/image";
+import Link from "next/link";
 
 interface Classroom {
   id: string | number;
@@ -15,6 +18,7 @@ export default function ArchivedClassroom() {
   const [classrooms, setClassrooms] = useState<Classroom[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
+  const { t } = useLanguage();
 
   const ITEMS_PER_PAGE = 8;
   const totalPages = Math.ceil(classrooms.length / ITEMS_PER_PAGE);
@@ -32,11 +36,17 @@ export default function ArchivedClassroom() {
       await unarchiveClassroom(id);
       setClassrooms((prev) => prev.filter((cls) => cls.id !== id));
     } catch {
-      alert("Failed to unarchive classroom");
+      alert(t("failedToUnarchiveClassroom"));
     }
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading)
+    return (
+      <div className="flex flex-col items-center">
+        <Image src="/icons/math.gif" alt="Loading..." width={40} height={40} />
+        <span className="text-gray-400 mt-2">{t("loadingArchivedClassrooms")}</span>
+      </div>
+    );
 
   return (
     <div className="space-y-4">
@@ -44,10 +54,10 @@ export default function ArchivedClassroom() {
         <table className="min-w-full text-sm text-left">
           <thead className="bg-gray-50 text-gray-600 uppercase text-xs hidden sm:table-header-group">
             <tr>
-              <th className="px-6 py-4">Classroom Name</th>
-              <th className="px-6 py-4">Total Students</th>
-              <th className="px-6 py-4">View</th>
-              <th className="px-6 py-4">Action</th>
+              <th className="px-6 py-4">{t("classroomName")}</th>
+              <th className="px-6 py-4">{t("totalStudents")}</th>
+              <th className="px-6 py-4">{t("view")}</th>
+              <th className="px-6 py-4">{t("action")}</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100 bg-white">
@@ -68,14 +78,16 @@ export default function ArchivedClassroom() {
                   {classroom.totalStudents}
                 </td>
                 <td className="px-6 py-4 text-blue-600 hover:underline cursor-pointer sm:table-cell">
-                  View Classroom
+                  <Link href={`/school/archived-classrooms/${classroom.id}`}>
+                    {t("viewClassroom")}
+                  </Link>
                 </td>
                 <td className="px-6 py-4 flex sm:table-cell sm:space-x-2 gap-2 sm:justify-start">
                   <Button
                     className="bg-[#25388C] hover:bg-[#1e2e6d]"
                     onClick={() => handleUnarchive(classroom.id)}
                   >
-                    Unarchive
+                    {t("unarchive")}
                   </Button>
                 </td>
               </tr>
@@ -84,24 +96,24 @@ export default function ArchivedClassroom() {
         </table>
       </div>
 
-       {/* Pagination Controls */}
+      {/* Pagination Controls */}
       <div className="flex items-center gap-4 justify-center mt-4">
         <Button
           className="bg-[#25388C] hover:bg-[#1e2e6d]"
           onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
           disabled={currentPage === 1}
         >
-          Previous
+          {t("previous")}
         </Button>
         <span className="text-sm text-gray-600">
-          Page {currentPage} of {totalPages}
+          {t("page")} {currentPage} {t("of")} {totalPages}
         </span>
         <Button
           className="bg-[#25388C] hover:bg-[#1e2e6d]"
           onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
           disabled={currentPage === totalPages}
         >
-          Next
+          {t("next")}
         </Button>
       </div>
     </div>
