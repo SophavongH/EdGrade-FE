@@ -150,7 +150,7 @@
   "back": "ត្រឡប់ក្រោយ",
   "dob": "ថ្ងៃខែឆ្នាំកំណើត",
   "parentPhone": "លេខទូរស័ព្ទឪពុកម្តាយ",
-  "khmerLiturature": "អក្សរសាស្ត្រខ្មែរ",
+  "khmerLiterature": "អក្សរសាស្ត្រខ្មែរ",
   "biology": "ជីវវិទ្យា",
   "chemistry": "គីមីវិទ្យា",
   "physics": "រូបវិទ្យា",
@@ -158,6 +158,5 @@
   "history": "ប្រវត្តិសាស្ត្រ",
   "students": "សិស្ស",
   "classrooms": "ថ្នាក់រៀន",
-  "gender": "ភេទ",
-  "khmerliturature": "អក្សរសាស្ត្រខ្មែរ"
+  "gender": "ភេទ"
 }
