@@ -159,7 +159,7 @@ export default function ReportCardDetailPage() {
       ...prev,
       [studentId]: {
         ...prev[studentId],
-        [field]: value,
+        [field]: value, // field is always a fixed key from selectedSubjects
       },
     }));
   };
