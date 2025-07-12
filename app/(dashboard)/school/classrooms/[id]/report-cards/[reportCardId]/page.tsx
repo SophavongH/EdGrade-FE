@@ -244,6 +244,13 @@ export default function ReportCardDetailPage() {
         };
       });
 
+      // NEW: Save selected subjects to backend
+      await fetch(`/api/report-cards/${reportCardId}/subjects`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ subjects: selectedSubjects }),
+      });
+
       await saveReportCardScores(reportCardId, payload);
       alert(t("successfullySavedScores"));
     } catch {
