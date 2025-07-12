@@ -2,11 +2,35 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
+import { useLanguage } from "@/lib/LanguageProvider";
+
+type ReportStudent = {
+  id?: string;
+  name?: string;
+  gender?: string;
+  avatar?: string;
+};
+
+type ReportScore = {
+  [subject: string]: string | number | undefined;
+  absent?: string;
+  total?: string;
+  average?: string;
+  grade?: string;
+  rank?: string;
+};
+
+type ReportData = {
+  student?: ReportStudent;
+  score?: ReportScore;
+  subjects?: string[];
+  totalStudents?: number;
+};
 
 export default function ReportViewPage() {
   const { token } = useParams();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [report, setReport] = useState<any>(null);
+  const { t } = useLanguage();
+  const [report, setReport] = useState<ReportData | null>(null);
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -22,13 +46,9 @@ export default function ReportViewPage() {
   if (error) return <div className="text-red-500">{error}</div>;
   if (!report) return <div>Loading...</div>;
 
-  console.log("Report data:", report);
-
   const student = report.student || {};
   const score = report.score || {};
-  const subjects = Object.entries(score).filter(
-    ([key]) => !["rank", "grade", "total", "average", "absent"].includes(key)
-  );
+  const subjectsToShow = report.subjects || [];
   const totalStudents = typeof report.totalStudents === "number"
     ? report.totalStudents
     : "-";
@@ -84,21 +104,16 @@ export default function ReportViewPage() {
       </div>
 
       {/* Table */}
-
       <div className="flex bg-gray-600 text-white px-3 py-2 rounded-t font-bold">
-        <div>
-          Subject
-        </div> 
-        <div className="ml-auto">
-          Score
-        </div>
+        <div>{t("subject")}</div>
+        <div className="ml-auto">{t("score")}</div>
       </div>
       <table className="w-full border-collapse">
         <tbody>
-          {subjects.map(([subject, value], idx) => (
-            <tr key={subject} className={idx % 2 === 0 ? "bg-gray-100" : ""}>
-              <td className="px-2 py-1 text-[15px]">{subject}</td>
-              <td className="px-2 py-1 text-right">{String(value)}</td>
+          {subjectsToShow.map((subjectKey: string, idx: number) => (
+            <tr key={subjectKey} className={idx % 2 === 0 ? "bg-gray-100" : ""}>
+              <td className="px-2 py-1 text-[15px]">{t(subjectKey)}</td>
+              <td className="px-2 py-1 text-right">{String(score[subjectKey])}</td>
             </tr>
           ))}
         </tbody>
@@ -122,8 +137,7 @@ export default function ReportViewPage() {
             Total Students: <span className="font-bold">{totalStudents}</span>
           </div>
           <div>
-            Average:{" "}
-            <span className="font-bold">{score.average || "-"}</span>
+            Average: <span className="font-bold">{score.average || "-"}</span>
           </div>
           <div>
             Ranking: <span className="font-bold">{score.rank || "-"}</span>
