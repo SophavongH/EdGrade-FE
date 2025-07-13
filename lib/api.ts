@@ -255,3 +255,17 @@ export async function deleteCustomSubject(subject: string) {
   return res.json();
 }
 
+export async function saveReportCardSubjects(reportCardId: string | number, subjects: string[]) {
+  const token = localStorage.getItem("token");
+  const res = await fetch(`/api/report-cards/${reportCardId}/subjects`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ subjects }),
+  });
+  if (!res.ok) throw new Error("Failed to save report card subjects");
+  return res.json();
+}
+

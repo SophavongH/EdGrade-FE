@@ -10,6 +10,7 @@ import {
   fetchCustomSubjects,
   addCustomSubject,
   deleteCustomSubject,
+  saveReportCardSubjects,
 } from "@/lib/api";
 import { useParams } from "next/navigation";
 import type { Student } from "@/types/student";
@@ -205,12 +206,7 @@ export default function ReportCardDetailPage() {
   const handleSave = async () => {
     setSaving(true);
     try {
-      // Save selected subjects to backend
-      await fetch(`/api/report-cards/${reportCardId}/subjects`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ subjects: selectedSubjects }),
-      });
+      await saveReportCardSubjects(reportCardId, selectedSubjects);
 
       const tableSubjects = [...selectedSubjects];
       const totals = students.map((stu) =>
