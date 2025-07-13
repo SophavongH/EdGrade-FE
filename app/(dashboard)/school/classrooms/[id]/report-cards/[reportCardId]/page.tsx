@@ -159,7 +159,7 @@ export default function ReportCardDetailPage() {
       ...prev,
       [studentId]: {
         ...prev[studentId],
-        [field]: value, // field is always a fixed key from selectedSubjects
+        [field]: value,
       },
     }));
   };
@@ -201,10 +201,17 @@ export default function ReportCardDetailPage() {
     }
   };
 
-  // Save handler (replace with your API call)
+  // Save handler
   const handleSave = async () => {
     setSaving(true);
     try {
+      // Save selected subjects to backend
+      await fetch(`/api/report-cards/${reportCardId}/subjects`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ subjects: selectedSubjects }),
+      });
+
       const tableSubjects = [...selectedSubjects];
       const totals = students.map((stu) =>
         tableSubjects.reduce((sum, subjectKey) => {
@@ -242,13 +249,6 @@ export default function ReportCardDetailPage() {
           average: String(average),
           rank: String(rank),
         };
-      });
-
-      // NEW: Save selected subjects to backend
-      await fetch(`/api/report-cards/${reportCardId}/subjects`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ subjects: selectedSubjects }),
       });
 
       await saveReportCardScores(reportCardId, payload);
