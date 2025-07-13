@@ -166,5 +166,7 @@
   "total_scores": "Total Scores",
   "total_students": "Total Students",
   "switch_language": "ប្ដូរភាសា",
-  "student_id": "Student ID"
+  "student_id": "Student ID",
+  "subject": "Subjects",
+  "score": "Scores"
 }
