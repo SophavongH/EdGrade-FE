@@ -165,5 +165,6 @@
   "grade_poor": "Poor",
   "total_scores": "Total Scores",
   "total_students": "Total Students",
-  "switch_language": "ប្ដូរភាសា"
+  "switch_language": "ប្ដូរភាសា",
+  "student_id": "Student ID"
 }

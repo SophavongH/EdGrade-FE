@@ -6,6 +6,7 @@ import { useLanguage } from "@/lib/LanguageProvider";
 
 type ReportStudent = {
   id?: string;
+  student_id?: string; // <-- add this field
   name?: string;
   gender?: string;
   avatar?: string;
@@ -108,7 +109,7 @@ export default function ReportViewPage() {
               alt={student.name || t("name")}
               width={96}
               height={96}
-              className="w-24 h-24 object-cover rounded-full"
+              className="object-cover rounded-full w-24 h-24" // <-- ensure circle
               unoptimized
             />
           ) : (
@@ -126,7 +127,9 @@ export default function ReportViewPage() {
         <div className="font-bold">
           <div>{t("name")}: {student.name || "-"}</div>
           <div>{t("gender")}: {student.gender || ""}</div>
-          <div className="text-xs">{t("student_id")}: {student.id || ""}</div>
+          <div className="text-xs">
+            {t("student_id")}: {student.student_id || "-"}
+          </div>
         </div>
       </div>
 
