@@ -27,9 +27,28 @@ type ReportData = {
   totalStudents?: number;
 };
 
+function getGradeText(grade: string, t: (key: string) => string) {
+  switch (grade) {
+    case "ល្អ":
+    case "Good":
+      return t("grade_good");
+    case "ល្អបង្គូរ":
+    case "Fairly Good":
+      return t("grade_fairly_good");
+    case "មធ្យម":
+    case "Average":
+      return t("grade_average");
+    case "ខ្សោយ":
+    case "Poor":
+      return t("grade_poor");
+    default:
+      return grade || "-";
+  }
+}
+
 export default function ReportViewPage() {
   const { token } = useParams();
-  const { t } = useLanguage();
+  const { t, lang, setLang } = useLanguage();
   const [report, setReport] = useState<ReportData | null>(null);
   const [error, setError] = useState("");
 
@@ -40,11 +59,11 @@ export default function ReportViewPage() {
         res.ok ? res.json() : Promise.reject("Invalid or expired link")
       )
       .then(setReport)
-      .catch(() => setError("This link is invalid or has already been used."));
-  }, [token]);
+      .catch(() => setError(t("invalid_link")));
+  }, [token, t]);
 
   if (error) return <div className="text-red-500">{error}</div>;
-  if (!report) return <div>Loading...</div>;
+  if (!report) return <div>{t("loading")}</div>;
 
   const student = report.student || {};
   const score = report.score || {};
@@ -55,6 +74,14 @@ export default function ReportViewPage() {
 
   return (
     <div className="max-w-xs mx-auto bg-white rounded-2xl shadow-lg p-4 mt-4 border-2 border-blue-100 font-[Kantumruy]">
+      <div className="flex justify-end mb-2">
+        <button
+          className="px-3 py-1 rounded bg-blue-100 text-blue-900 font-semibold"
+          onClick={() => setLang(lang === "en" ? "kh" : "en")}
+        >
+          {t("switch_language")}
+        </button>
+      </div>
       {/* Logo */}
       <div className="flex items-center gap-2 mb-2">
         <Image
@@ -78,7 +105,7 @@ export default function ReportViewPage() {
                   ? student.avatar
                   : `https://ik.imagekit.io/edgrade/${student.avatar}`
               }
-              alt={student.name || "Student"}
+              alt={student.name || t("name")}
               width={96}
               height={96}
               className="w-24 h-24 object-cover rounded-full"
@@ -97,9 +124,9 @@ export default function ReportViewPage() {
           )}
         </div>
         <div className="font-bold">
-          <div>Name: {student.name || "-"}</div>
-          <div>{student.gender || ""}</div>
-          <div className="text-xs">{student.id || ""}</div>
+          <div>{t("name")}: {student.name || "-"}</div>
+          <div>{t("gender")}: {student.gender || ""}</div>
+          <div className="text-xs">{t("student_id")}: {student.id || ""}</div>
         </div>
       </div>
 
@@ -123,24 +150,24 @@ export default function ReportViewPage() {
       <div className="flex justify-between mt-4 text-[15px]">
         <div>
           <div>
-            Grade: <span className="font-bold">{score.grade || "-"}</span>
+            {t("grade")}: <span className="font-bold">{getGradeText(score.grade as string, t)}</span>
           </div>
           <div>
-            Absent: <span className="font-bold">{score.absent || "0"}</span>
+            {t("absent")}: <span className="font-bold">{score.absent || "0"}</span>
           </div>
         </div>
         <div>
           <div>
-            Total Scores: <span className="font-bold">{score.total || "-"}</span>
+            {t("total_scores")}: <span className="font-bold">{score.total || "-"}</span>
           </div>
           <div>
-            Total Students: <span className="font-bold">{totalStudents}</span>
+            {t("total_students")}: <span className="font-bold">{totalStudents}</span>
           </div>
           <div>
-            Average: <span className="font-bold">{score.average || "-"}</span>
+            {t("average")}: <span className="font-bold">{score.average || "-"}</span>
           </div>
           <div>
-            Ranking: <span className="font-bold">{score.rank || "-"}</span>
+            {t("ranking")}: <span className="font-bold">{score.rank || "-"}</span>
           </div>
         </div>
       </div>

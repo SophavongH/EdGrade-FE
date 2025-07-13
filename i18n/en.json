@@ -158,5 +158,9 @@
   "history": "History",
   "students": "Students",
   "classrooms": "Classrooms",
-  "gender": "Sex"
+  "gender": "Sex",
+  "grade_good": "Good",
+  "grade_fairly_good": "Fairly Good",
+  "grade_average": "Average",
+  "grade_poor": "Poor"
 }

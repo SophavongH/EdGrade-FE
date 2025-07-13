@@ -158,5 +158,9 @@
   "history": "ប្រវត្តិសាស្ត្រ",
   "students": "សិស្ស",
   "classrooms": "ថ្នាក់រៀន",
-  "gender": "ភេទ"
+  "gender": "ភេទ",
+  "grade_good": "ល្អ",
+  "grade_fairly_good": "ល្អបង្គូរ",
+  "grade_average": "មធ្យម",
+  "grade_poor": "ខ្សោយ"
 }

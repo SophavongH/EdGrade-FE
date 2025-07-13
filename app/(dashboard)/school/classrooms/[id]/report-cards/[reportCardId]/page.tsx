@@ -31,11 +31,11 @@ type StudentScores = {
   };
 };
 
-function getGrade(average: number) {
-  if (average >= 40) return "ល្អ";
-  if (average >= 33) return "ល្អបង្គូរ";
-  if (average >= 25) return "មធ្យម";
-  return "ខ្សោយ";
+function getGrade(average: number, t: (key: string) => string) {
+  if (average >= 40) return t("grade_good");         // "ល្អ" or "Good"
+  if (average >= 33) return t("grade_fairly_good");  // "ល្អបង្គូរ" or "Fairly Good"
+  if (average >= 25) return t("grade_average");       // "មធ្យម" or "average"
+  return t("grade_poor");                            // "ខ្សោយ" or "Poor"
 }
 
 // Fixed subject keys
@@ -255,7 +255,7 @@ export default function ReportCardDetailPage() {
           ...scores[stu.id],
           total: String(total),
           average: String(average),
-          grade: getGrade(Number(average)), // <-- always set grade here!
+          grade: getGrade(Number(average), t), // <-- always set grade here!
           rank: String(rank),
         };
       });
@@ -393,7 +393,7 @@ export default function ReportCardDetailPage() {
                       {average}
                     </td>
                     <td className="px-4 py-2 text-center font-semibold">
-                      {getGrade(Number(average))}
+                      {getGrade(Number(average), t)}
                     </td>
                     <td className="px-4 py-2 text-center font-semibold">
                       {rank}
