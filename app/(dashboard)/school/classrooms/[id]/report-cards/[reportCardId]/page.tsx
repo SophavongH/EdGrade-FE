@@ -31,11 +31,12 @@ type StudentScores = {
   };
 };
 
-function getGrade(average: number, t: (key: string) => string) {
-  if (average >= 40) return t("grade_good");         // "ល្អ" or "Good"
-  if (average >= 33) return t("grade_fairly_good");  // "ល្អបង្គូរ" or "Fairly Good"
-  if (average >= 25) return t("grade_average");       // "មធ្យម" or "average"
-  return t("grade_poor");                            // "ខ្សោយ" or "Poor"
+// Always return English grade for saving
+function getGrade(average: number): string {
+  if (average >= 40) return "Good";
+  if (average >= 33) return "Fairly Good";
+  if (average >= 25) return "Average";
+  return "Poor";
 }
 
 // Fixed subject keys
@@ -55,7 +56,6 @@ export default function ReportCardDetailPage() {
   const reportCardId = params.reportCardId as string;
   const { t } = useLanguage();
 
-  // For subject selection modal, show translated names
   const DEFAULT_SUBJECTS = useMemo(() => SUBJECT_KEYS, []);
 
   const [students, setStudents] = useState<Student[]>([]);
@@ -67,7 +67,6 @@ export default function ReportCardDetailPage() {
   const [error, setError] = useState<string | null>(null);
   const [reportCard, setReportCard] = useState<ReportCard | null>(null);
 
-  // Editable scores state
   const [scores, setScores] = useState<StudentScores>({});
   const [saving, setSaving] = useState(false);
   const [customSubjects, setCustomSubjects] = useState<string[]>([]);
@@ -209,11 +208,10 @@ export default function ReportCardDetailPage() {
     }
   };
 
-  // Save handler
+  // Save handler: always save grade in English
   const handleSave = async () => {
     setSaving(true);
     try {
-      // Save selected subjects to backend
       await fetch(`/api/report-cards/${reportCardId}/subjects`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -227,7 +225,6 @@ export default function ReportCardDetailPage() {
           return sum + (isNaN(val) ? 0 : val);
         }, 0)
       );
-      // Ranking logic
       const sortedTotals = [...totals]
         .map((total, idx) => ({ total, idx }))
         .sort((a, b) => b.total - a.total);
@@ -242,7 +239,6 @@ export default function ReportCardDetailPage() {
         currentRank++;
       }
 
-      // Build the payload with computed fields
       const payload: Record<string, StudentScores[string]> = {};
       students.forEach((stu, idx) => {
         const total = totals[idx];
@@ -255,7 +251,7 @@ export default function ReportCardDetailPage() {
           ...scores[stu.id],
           total: String(total),
           average: String(average),
-          grade: getGrade(Number(average), t), // <-- always set grade here!
+          grade: getGrade(Number(average)), // <-- always English!
           rank: String(rank),
         };
       });
@@ -393,7 +389,14 @@ export default function ReportCardDetailPage() {
                       {average}
                     </td>
                     <td className="px-4 py-2 text-center font-semibold">
-                      {getGrade(Number(average), t)}
+                      {t(
+                        {
+                          Good: "grade_good",
+                          "Fairly Good": "grade_fairly_good",
+                          Average: "grade_average",
+                          Poor: "grade_poor",
+                        }[getGrade(Number(average))] || "-"
+                      )}
                     </td>
                     <td className="px-4 py-2 text-center font-semibold">
                       {rank}
