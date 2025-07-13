@@ -240,13 +240,14 @@ export default function ReportCardDetailPage() {
         }, 0);
         const average =
           tableSubjects.length > 0
-            ? (total / tableSubjects.length).toFixed(2)
-            : "0";
+            ? Number((total / tableSubjects.length).toFixed(2))
+            : 0;
         const rank = ranks[idx];
         payload[stu.id] = {
-          ...scores[stu.id], // includes all subjects
+          ...scores[stu.id],
           total: String(total),
           average: String(average),
+          grade: getGrade(average), // <-- auto grade
           rank: String(rank),
         };
       });
@@ -480,4 +481,11 @@ export default function ReportCardDetailPage() {
       )}
     </section>
   );
+}
+
+function getGrade(average: number) {
+  if (average >= 40) return "ល្អ";
+  if (average >= 33) return "ល្អបង្គូរ";
+  if (average >= 25) return "មធ្យម";
+  return "ខ្សោយ";
 }
