@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { useEffect, useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
@@ -208,7 +209,7 @@ export default function ReportCardDetailPage() {
     try {
       await saveReportCardSubjects(reportCardId, selectedSubjects);
 
-      const tableSubjects = [...selectedSubjects];
+      const tableSubjects = [...selectedSubjects]; // includes custom subjects
       const totals = students.map((stu) =>
         tableSubjects.reduce((sum, subjectKey) => {
           const val = Number(scores[stu.id]?.[subjectKey] || 0);
@@ -231,16 +232,19 @@ export default function ReportCardDetailPage() {
       }
 
       // Build the payload with computed fields
-      const payload: Record<string, StudentScores[string]> = {};
+      const payload: Record<string, any> = {};
       students.forEach((stu, idx) => {
-        const total = totals[idx];
+        const total = tableSubjects.reduce((sum, subjectKey) => {
+          const val = Number(scores[stu.id]?.[subjectKey] || 0);
+          return sum + (isNaN(val) ? 0 : val);
+        }, 0);
         const average =
           tableSubjects.length > 0
             ? (total / tableSubjects.length).toFixed(2)
             : "0";
         const rank = ranks[idx];
         payload[stu.id] = {
-          ...scores[stu.id],
+          ...scores[stu.id], // includes all subjects
           total: String(total),
           average: String(average),
           rank: String(rank),
@@ -358,14 +362,11 @@ export default function ReportCardDetailPage() {
                       />
                     </td>
                     {tableSubjects.map((subjectKey) => (
-                      <td key={subjectKey} className="px-4 py-2 text-center">
+                      <td key={subjectKey}>
                         <input
                           type="text"
-                          className="w-16 border rounded px-1 py-0.5 text-center"
                           value={scores[stu.id]?.[subjectKey] || ""}
-                          onChange={(e) =>
-                            handleScoreChange(stu.id, subjectKey, e.target.value)
-                          }
+                          onChange={(e) => handleScoreChange(stu.id, subjectKey, e.target.value)}
                         />
                       </td>
                     ))}
