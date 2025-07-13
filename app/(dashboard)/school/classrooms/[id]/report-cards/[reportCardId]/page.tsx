@@ -247,11 +247,19 @@ export default function ReportCardDetailPage() {
             ? (total / tableSubjects.length).toFixed(2)
             : "0";
         const rank = ranks[idx];
+
+        // Only include selected subjects
+        const filteredScores: Record<string, string> = {};
+        tableSubjects.forEach((subjectKey) => {
+          filteredScores[subjectKey] = scores[stu.id]?.[subjectKey] || "";
+        });
+
         payload[stu.id] = {
-          ...scores[stu.id],
+          absent: scores[stu.id]?.absent || "",
+          ...filteredScores,
           total: String(total),
           average: String(average),
-          grade: getGrade(Number(average)), // <-- always English!
+          grade: getGrade(Number(average)),
           rank: String(rank),
         };
       });
