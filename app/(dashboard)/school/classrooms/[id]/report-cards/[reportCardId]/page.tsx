@@ -33,7 +33,6 @@ type StudentScores = {
   };
 };
 
-// Fixed subject keys
 const SUBJECT_KEYS = [
   "khmerLiterature",
   "mathematics",
@@ -44,15 +43,20 @@ const SUBJECT_KEYS = [
   // ...add all your subject keys here
 ];
 
+function getGrade(average: number) {
+  if (average >= 40) return "ល្អ";
+  if (average >= 33) return "ល្អបង្គូរ";
+  if (average >= 25) return "មធ្យម";
+  return "ខ្សោយ";
+}
+
 export default function ReportCardDetailPage() {
   const params = useParams();
   const classroomId = params.id as string;
   const reportCardId = params.reportCardId as string;
   const { t } = useLanguage();
 
-  // For subject selection modal, show translated names
   const DEFAULT_SUBJECTS = useMemo(() => SUBJECT_KEYS, []);
-
   const [students, setStudents] = useState<Student[]>([]);
   const [showSubjectModal, setShowSubjectModal] = useState(false);
   const [selectedSubjects, setSelectedSubjects] = useState<string[]>(DEFAULT_SUBJECTS);
@@ -61,14 +65,12 @@ export default function ReportCardDetailPage() {
   const [error, setError] = useState<string | null>(null);
   const [reportCard, setReportCard] = useState<ReportCard | null>(null);
 
-  // Editable scores state
   const [scores, setScores] = useState<StudentScores>({});
   const [saving, setSaving] = useState(false);
   const [customSubjects, setCustomSubjects] = useState<string[]>([]);
   const [newSubject, setNewSubject] = useState("");
   const [subjectLoading, setSubjectLoading] = useState(false);
 
-  // Fetch students
   useEffect(() => {
     if (!classroomId || isNaN(Number(classroomId))) {
       setError(t("invalidClassroomId"));
@@ -98,7 +100,6 @@ export default function ReportCardDetailPage() {
       .catch(() => setError(t("failedToFetchStudents")));
   }, [classroomId, t, DEFAULT_SUBJECTS]);
 
-  // Fetch report card info for title
   useEffect(() => {
     if (!classroomId) return;
     fetchReportCards(classroomId)
@@ -109,7 +110,6 @@ export default function ReportCardDetailPage() {
       .catch(() => setReportCard(null));
   }, [classroomId, reportCardId]);
 
-  // Fetch report card scores
   useEffect(() => {
     if (!reportCardId) return;
     fetchReportCardScores(reportCardId)
@@ -119,14 +119,12 @@ export default function ReportCardDetailPage() {
       .catch(() => {});
   }, [reportCardId]);
 
-  // Fetch custom subjects from backend
   useEffect(() => {
     fetchCustomSubjects()
       .then(setCustomSubjects)
       .catch(() => setCustomSubjects([]));
   }, []);
 
-  // Handle select all
   useEffect(() => {
     if (selectAll) {
       setSelectedStudentIds(students.map((s) => s.id));
@@ -135,7 +133,6 @@ export default function ReportCardDetailPage() {
     }
   }, [selectAll, students]);
 
-  // Handle subject selection
   const handleSubjectChange = (subjectKey: string) => {
     setSelectedSubjects((prev) =>
       prev.includes(subjectKey)
@@ -144,14 +141,12 @@ export default function ReportCardDetailPage() {
     );
   };
 
-  // Handle student selection
   const handleStudentCheck = (id: string) => {
     setSelectedStudentIds((prev) =>
       prev.includes(id) ? prev.filter((sid) => sid !== id) : [...prev, id]
     );
   };
 
-  // Handle input change for scores
   const handleScoreChange = (
     studentId: string,
     field: string,
@@ -166,7 +161,6 @@ export default function ReportCardDetailPage() {
     }));
   };
 
-  // Add new subject handler (API)
   const handleAddSubject = async () => {
     const subjectKey = newSubject.trim();
     if (
@@ -189,7 +183,6 @@ export default function ReportCardDetailPage() {
     }
   };
 
-  // Remove custom subject handler (API)
   const handleRemoveCustomSubject = async (subjectKey: string) => {
     setSubjectLoading(true);
     try {
@@ -203,20 +196,18 @@ export default function ReportCardDetailPage() {
     }
   };
 
-  // Save handler
   const handleSave = async () => {
     setSaving(true);
     try {
       await saveReportCardSubjects(reportCardId, selectedSubjects);
 
-      const tableSubjects = [...selectedSubjects]; // includes custom subjects
+      const tableSubjects = [...selectedSubjects];
       const totals = students.map((stu) =>
         tableSubjects.reduce((sum, subjectKey) => {
           const val = Number(scores[stu.id]?.[subjectKey] || 0);
           return sum + (isNaN(val) ? 0 : val);
         }, 0)
       );
-      // Ranking logic
       const sortedTotals = [...totals]
         .map((total, idx) => ({ total, idx }))
         .sort((a, b) => b.total - a.total);
@@ -231,7 +222,6 @@ export default function ReportCardDetailPage() {
         currentRank++;
       }
 
-      // Build the payload with computed fields
       const payload: Record<string, any> = {};
       students.forEach((stu, idx) => {
         const total = tableSubjects.reduce((sum, subjectKey) => {
@@ -247,7 +237,7 @@ export default function ReportCardDetailPage() {
           ...scores[stu.id],
           total: String(total),
           average: String(average),
-          grade: getGrade(average), // <-- auto grade
+          grade: getGrade(average),
           rank: String(rank),
         };
       });
@@ -261,7 +251,6 @@ export default function ReportCardDetailPage() {
     }
   };
 
-  // Table columns
   const tableSubjects = [...selectedSubjects];
 
   return (
@@ -339,8 +328,8 @@ export default function ReportCardDetailPage() {
                 const total = totals[idx];
                 const average =
                   tableSubjects.length > 0
-                    ? (total / tableSubjects.length).toFixed(2)
-                    : "0";
+                    ? Number((total / tableSubjects.length).toFixed(2))
+                    : 0;
                 const rank = ranks[idx];
                 return (
                   <tr key={stu.id} className="border-b">
@@ -363,11 +352,14 @@ export default function ReportCardDetailPage() {
                       />
                     </td>
                     {tableSubjects.map((subjectKey) => (
-                      <td key={subjectKey}>
+                      <td key={subjectKey} className="px-4 py-2 text-center">
                         <input
                           type="text"
+                          className="w-16 border rounded px-1 py-0.5 text-center"
                           value={scores[stu.id]?.[subjectKey] || ""}
-                          onChange={(e) => handleScoreChange(stu.id, subjectKey, e.target.value)}
+                          onChange={(e) =>
+                            handleScoreChange(stu.id, subjectKey, e.target.value)
+                          }
                         />
                       </td>
                     ))}
@@ -377,15 +369,8 @@ export default function ReportCardDetailPage() {
                     <td className="px-4 py-2 text-center font-semibold">
                       {average}
                     </td>
-                    <td className="px-4 py-2 text-center">
-                      <input
-                        type="text"
-                        className="w-16 border rounded px-1 py-0.5 text-center"
-                        value={scores[stu.id]?.grade || ""}
-                        onChange={(e) =>
-                          handleScoreChange(stu.id, "grade", e.target.value)
-                        }
-                      />
+                    <td className="px-4 py-2 text-center font-semibold">
+                      {getGrade(average)}
                     </td>
                     <td className="px-4 py-2 text-center font-semibold">
                       {rank}
@@ -481,11 +466,4 @@ export default function ReportCardDetailPage() {
       )}
     </section>
   );
-}
-
-function getGrade(average: number) {
-  if (average >= 40) return "ល្អ";
-  if (average >= 33) return "ល្អបង្គូរ";
-  if (average >= 25) return "មធ្យម";
-  return "ខ្សោយ";
 }
