@@ -31,6 +31,13 @@ type StudentScores = {
   };
 };
 
+function getGrade(average: number) {
+  if (average >= 40) return "ល្អ";
+  if (average >= 33) return "ល្អបង្គូរ";
+  if (average >= 25) return "មធ្យម";
+  return "ខ្សោយ";
+}
+
 // Fixed subject keys
 const SUBJECT_KEYS = [
   "khmerLiterature",
@@ -53,7 +60,8 @@ export default function ReportCardDetailPage() {
 
   const [students, setStudents] = useState<Student[]>([]);
   const [showSubjectModal, setShowSubjectModal] = useState(false);
-  const [selectedSubjects, setSelectedSubjects] = useState<string[]>(DEFAULT_SUBJECTS);
+  const [selectedSubjects, setSelectedSubjects] =
+    useState<string[]>(DEFAULT_SUBJECTS);
   const [selectedStudentIds, setSelectedStudentIds] = useState<string[]>([]);
   const [selectAll, setSelectAll] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -368,7 +376,11 @@ export default function ReportCardDetailPage() {
                           className="w-16 border rounded px-1 py-0.5 text-center"
                           value={scores[stu.id]?.[subjectKey] || ""}
                           onChange={(e) =>
-                            handleScoreChange(stu.id, subjectKey, e.target.value)
+                            handleScoreChange(
+                              stu.id,
+                              subjectKey,
+                              e.target.value
+                            )
                           }
                         />
                       </td>
@@ -379,15 +391,8 @@ export default function ReportCardDetailPage() {
                     <td className="px-4 py-2 text-center font-semibold">
                       {average}
                     </td>
-                    <td className="px-4 py-2 text-center">
-                      <input
-                        type="text"
-                        className="w-16 border rounded px-1 py-0.5 text-center"
-                        value={scores[stu.id]?.grade || ""}
-                        onChange={(e) =>
-                          handleScoreChange(stu.id, "grade", e.target.value)
-                        }
-                      />
+                    <td className="px-4 py-2 text-center font-semibold">
+                      {getGrade(Number(average))}
                     </td>
                     <td className="px-4 py-2 text-center font-semibold">
                       {rank}
