@@ -257,7 +257,7 @@ export async function deleteCustomSubject(subject: string) {
 
 export async function saveReportCardSubjects(reportCardId: string | number, subjects: string[]) {
   const token = localStorage.getItem("token");
-  const res = await fetch(`/api/report-cards/${reportCardId}/subjects`, {
+  const res = await fetch(`${BASE_URL}/report-cards/${reportCardId}/subjects`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
