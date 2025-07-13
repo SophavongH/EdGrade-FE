@@ -162,5 +162,8 @@
   "grade_good": "Good",
   "grade_fairly_good": "Fairly Good",
   "grade_average": "Average",
-  "grade_poor": "Poor"
+  "grade_poor": "Poor",
+  "total_scores": "Total Scores",
+  "total_students": "Total Students",
+  "switch_language": "Switch Language"
 }

@@ -162,5 +162,8 @@
   "grade_good": "ល្អ",
   "grade_fairly_good": "ល្អបង្គូរ",
   "grade_average": "មធ្យម",
-  "grade_poor": "ខ្សោយ"
+  "grade_poor": "ខ្សោយ",
+  "total_scores": "ពិន្ទុសរុប",
+  "total_students": "សិស្សសរុប",
+  "switch_language": "ប្ដូរភាសា"
 }
