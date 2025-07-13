@@ -255,6 +255,7 @@ export default function ReportCardDetailPage() {
           ...scores[stu.id],
           total: String(total),
           average: String(average),
+          grade: getGrade(Number(average)), // <-- always set grade here!
           rank: String(rank),
         };
       });
