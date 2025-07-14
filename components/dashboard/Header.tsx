@@ -1,14 +1,8 @@
 import React from "react";
 import { useLanguage } from "@/lib/LanguageProvider";
+import type { Session } from "@/lib/user";
 
-type UserSession = {
-  user: {
-    name?: string;
-    // add other user properties as needed
-  };
-};
-
-const Header = ({ session }: { session: UserSession }) => {
+const Header = ({ session }: { session: Session }) => {
   const { t } = useLanguage();
 
   return (
