@@ -168,5 +168,7 @@
   "switch_language": "Switch Language",
   "student_id": "លេខសម្គាល់សិស្ស",
    "subject": "មុខវិជ្ជា",
-  "score": "ពិន្ទុ"
+  "score": "ពិន្ទុ",
+  "profileUpdated": "ប្រវត្តិរូបបានធ្វើបច្ចុប្បន្នភាពដោយជោគជ័យ",
+  "failedToUpdateProfile": "ការធ្វើបច្ចុប្បន្នភាពប្រវត្តិរូបបានបរាជ័យ"
 }

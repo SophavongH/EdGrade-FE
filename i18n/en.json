@@ -168,5 +168,7 @@
   "switch_language": "ប្ដូរភាសា",
   "student_id": "Student ID",
   "subject": "Subjects",
-  "score": "Scores"
+  "score": "Scores",
+  "profileUpdated": "Profile updated successfully",
+  "failedToUpdateProfile": "Failed to update profile"
 }

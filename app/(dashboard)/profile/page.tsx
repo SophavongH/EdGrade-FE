@@ -97,7 +97,12 @@ export default function ProfilePage() {
     });
     setLoading(false);
     if (res.ok) {
-      setSession({ user: { ...form, avatar: form.avatar } }); // update avatar in session
+      // Refetch updated user profile
+      const token = localStorage.getItem("token");
+      const updatedUser = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/profile`, {
+        headers: { Authorization: `Bearer ${token}` },
+      }).then(r => r.json());
+      setSession({ user: updatedUser }); // update session with new avatar
       alert(t("profileUpdated"));
       router.refresh();
     } else {
