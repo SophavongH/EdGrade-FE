@@ -1,8 +1,12 @@
 export type User = {
   id: string;
+  name: string | null;
   email: string;
-  name?: string;
-  role: string;
+  role: "admin" | "user";
+  password?: string;
+  createdAt?: Date | null;
+  status?: string | null;
+  avatar?: string; // <-- Add this line
 };
 
 export type Session = {

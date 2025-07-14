@@ -97,6 +97,7 @@ export default function ProfilePage() {
     });
     setLoading(false);
     if (res.ok) {
+      setSession({ user: { ...form, avatar: form.avatar } }); // update avatar in session
       alert(t("profileUpdated"));
       router.refresh();
     } else {

@@ -73,7 +73,7 @@ const Sidebar = ({ session }: { session: Session }) => {
         {/* ChevronUp (ProfileMenuUp) - show above user info on mobile, right in row on desktop */}
         <div className="w-full flex justify-center md:hidden mb-2">
           <ProfileMenuUp
-            name={session?.user?.name}
+            name={session?.user?.name ?? undefined}
             email={session?.user?.email}
           />
         </div>
@@ -100,7 +100,7 @@ const Sidebar = ({ session }: { session: Session }) => {
           {/* ChevronUp (ProfileMenuUp) - show inline only on desktop */}
           <div className="hidden md:block">
             <ProfileMenuUp
-              name={session?.user?.name}
+              name={session?.user?.name ?? undefined}
               email={session?.user?.email}
             />
           </div>
