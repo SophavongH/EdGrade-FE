@@ -125,16 +125,6 @@ export default function ProfilePage() {
       </div>
       {/* Main Content */}
       <div className="flex-1 flex flex-col items-center py-10 px-4">
-        {/* Go Back Button */}
-        <Button
-          className="mb-6 bg-white border rounded px-4 py-2 text-gray-700 hover:bg-gray-100 w-fit"
-          onClick={() => router.push("/")}
-        >
-          <span className="flex items-center gap-2">
-            <Image src="/icons/undo-arrow.svg" alt={t("back")} width={20} height={20} />
-            {t("goBack")}
-          </span>
-        </Button>
         <div className="w-full max-w-md bg-white rounded-2xl shadow p-8 flex flex-col items-center">
           <h1 className="text-2xl font-bold mb-8 text-center">{t("editProfile")}</h1>
           <form className="w-full space-y-4" onSubmit={handleSubmit}>
