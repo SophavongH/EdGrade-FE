@@ -81,11 +81,21 @@ const Sidebar = ({ session }: { session: Session }) => {
           {/* Avatar */}
           <div className="relative">
             <Avatar className="h-9 w-9">
-              <AvatarFallback className="flex h-9 w-9 items-center justify-center rounded-full bg-orange-100 text-base font-semibold text-black">
-                {getInitials(
-                  session?.user?.name || session?.user?.email || "IN"
-                )}
-              </AvatarFallback>
+              {session?.user?.avatar ? (
+                <Image
+                  src={session.user.avatar}
+                  alt={session.user.name || session.user.email || "IN"}
+                  width={36}
+                  height={36}
+                  className="h-9 w-9 rounded-full object-cover"
+                />
+              ) : (
+                <AvatarFallback className="flex h-9 w-9 items-center justify-center rounded-full bg-orange-100 text-base font-semibold text-black">
+                  {getInitials(
+                    session?.user?.name || session?.user?.email || "IN"
+                  )}
+                </AvatarFallback>
+              )}
             </Avatar>
           </div>
           {/* User info */}
