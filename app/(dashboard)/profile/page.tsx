@@ -7,7 +7,7 @@ import { useLanguage } from "@/lib/LanguageProvider";
 import Image from "next/image";
 import SchoolSidebar from "@/components/dashboard/Schoolsidebar";
 import Sidebar from "@/components/dashboard/Sidebar";
-import Link from "next/link";
+
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -25,7 +25,6 @@ export default function ProfilePage() {
   const [pageLoading, setPageLoading] = useState(true);
   const [session, setSession] = useState<any>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
 
   // Fetch user info on mount
   useEffect(() => {
@@ -46,8 +45,8 @@ export default function ProfilePage() {
           avatar: data.avatar || "",
         }));
         setImage(data.avatar || null);
-        setRole(data.role); // expects "school" or "admin"
-        setSession({ user: data }); // <-- set session object
+        setRole(data.role);
+        setSession({ user: data });
       })
       .finally(() => setPageLoading(false));
   }, [router]);
@@ -127,16 +126,18 @@ export default function ProfilePage() {
       {/* Main Content */}
       <div className="flex-1 flex flex-col items-center py-10 px-4">
         {/* Go Back Button */}
-        <Link
-          href="/"
-          className="flex items-center gap-2 bg-white border rounded px-4 py-2 mb-6 text-gray-700 hover:bg-gray-100 w-fit"
+        <Button
+          className="mb-6 bg-white border rounded px-4 py-2 text-gray-700 hover:bg-gray-100 w-fit"
+          onClick={() => router.push("/")}
         >
-          <Image src="/icons/undo-arrow.svg" alt={t("back")} width={20} height={20} />
-          <span className="font-semibold">{t("goBack")}</span>
-        </Link>
-        <div className="w-full max-w-2xl bg-white rounded-2xl shadow p-8">
+          <span className="flex items-center gap-2">
+            <Image src="/icons/undo-arrow.svg" alt={t("back")} width={20} height={20} />
+            {t("goBack")}
+          </span>
+        </Button>
+        <div className="w-full max-w-md bg-white rounded-2xl shadow p-8 flex flex-col items-center">
           <h1 className="text-2xl font-bold mb-8 text-center">{t("editProfile")}</h1>
-          <form className="w-full max-w-2xl space-y-4" onSubmit={handleSubmit}>
+          <form className="w-full space-y-4" onSubmit={handleSubmit}>
             {/* Avatar upload */}
             <div
               className="w-36 h-36 rounded-full bg-orange-200 flex items-center justify-center cursor-pointer mb-6 overflow-hidden mx-auto"
