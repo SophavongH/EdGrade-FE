@@ -55,7 +55,7 @@ export default function ArchivedClassroom() {
           <thead className="bg-gray-50 text-gray-600 uppercase text-xs hidden sm:table-header-group">
             <tr>
               <th className="px-6 py-4">{t("classroomName")}</th>
-              <th className="px-6 py-4">{t("totalStudents")}</th>
+              
               <th className="px-6 py-4">{t("view")}</th>
               <th className="px-6 py-4">{t("action")}</th>
             </tr>
@@ -73,9 +73,6 @@ export default function ArchivedClassroom() {
                     {classroom.name?.charAt(0)}
                   </div>
                   <div className="text-sm font-medium">{classroom.name}</div>
-                </td>
-                <td className="px-6 py-4 sm:table-cell">
-                  {classroom.totalStudents}
                 </td>
                 <td className="px-6 py-4 text-blue-600 hover:underline cursor-pointer sm:table-cell">
                   <Link href={`/school/archived-classrooms/${classroom.id}`}>
