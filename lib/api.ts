@@ -162,11 +162,11 @@ export const fetchReportCards = async (classroomId: string) => {
   return res.json();
 };
 
-export const createReportCard = async (classroomId: string | number, title: string) => {
+export const createReportCard = async (classroomId: string | number, title: string, subjects: string[]) => {
   const res = await fetch(`${BASE_URL}/report-cards/classrooms/${classroomId}/report-cards`, {
     method: "POST",
     headers: Object.assign({ "Content-Type": "application/json" }, getAuthHeaders()),
-    body: JSON.stringify({ title }),
+    body: JSON.stringify({ title, subjects }), // <-- include subjects!
   });
   if (!res.ok) throw new Error("Failed to create report card");
   return res.json();

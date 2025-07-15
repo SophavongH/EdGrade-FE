@@ -80,6 +80,7 @@ const Page = () => {
   const [reportCards, setReportCards] = useState<ReportCard[]>([]);
   const [showCreateReportCard, setShowCreateReportCard] = useState(false);
   const [deleteConfirmId, setDeleteConfirmId] = useState<number | null>(null);
+  const [selectedSubjects, setSelectedSubjects] = useState<string[]>([]);
 
   // Fetch all students for modal (only user's students)
   useEffect(() => {
@@ -118,7 +119,8 @@ const Page = () => {
 
   // Create report card
   const handleCreateReportCard = async (title: string) => {
-    await createReportCard(params.id as string, title);
+    // selectedSubjects should be the array of subjects chosen by the user
+    await createReportCard(params.id as string, title, selectedSubjects);
     setShowCreateReportCard(false);
     fetchReportCards(params.id as string).then(setReportCards);
   };
@@ -278,6 +280,8 @@ const Page = () => {
         open={showCreateReportCard}
         onClose={() => setShowCreateReportCard(false)}
         onCreate={handleCreateReportCard}
+        selectedSubjects={selectedSubjects}
+        setSelectedSubjects={setSelectedSubjects}
       />
       {/* Delete Confirmation Modal */}
       {deleteConfirmId !== null && (

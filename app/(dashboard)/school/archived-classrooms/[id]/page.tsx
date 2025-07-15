@@ -21,7 +21,7 @@ type ReportCard = {
   createdBy: string;
   createdAt: string;
   creatorName?: string;
-  subjects: string[];
+  subjects: string[]; // <-- This line must be present!
 };
 
 export default function ArchivedClassroomDetailPage() {

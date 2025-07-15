@@ -8,9 +8,15 @@ type Props = {
   open: boolean;
   onClose: () => void;
   onCreate: (title: string) => Promise<void>;
+  selectedSubjects: string[]; // <-- add this
+  setSelectedSubjects: React.Dispatch<React.SetStateAction<string[]>>; // <-- add this
 };
 
-export default function CreateReportCardModal({ open, onClose, onCreate }: Props) {
+export default function CreateReportCardModal({
+  open,
+  onClose,
+  onCreate,
+}: Props) {
   const [title, setTitle] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
