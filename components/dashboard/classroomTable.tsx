@@ -105,7 +105,7 @@ export default function ClassroomTable({ classrooms, setClassrooms }: Props) {
           <thead className="bg-gray-50 text-gray-600 uppercase text-xs hidden sm:table-header-group">
             <tr>
               <th className="px-6 py-4">{t("classroomName")}</th>
-              <th className="px-6 py-4">{t("totalStudents")}</th>
+              
               <th className="px-6 py-4">{t("view")}</th>
               <th className="px-6 py-4">{t("action")}</th>
             </tr>
@@ -124,7 +124,7 @@ export default function ClassroomTable({ classrooms, setClassrooms }: Props) {
                   </div>
                   <div className="text-sm font-medium">{classroom.name}</div>
                 </td>
-                <td className="px-6 py-4">{classroom.totalStudents}</td>
+                
                 <td className="px-6 py-4">
                   <Link
                     href={`/school/classrooms/${classroom.id}`}
