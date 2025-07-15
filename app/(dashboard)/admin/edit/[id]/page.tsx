@@ -20,12 +20,7 @@ export default function EditSchoolUser() {
   const [initial, setInitial] = useState<{ name: string; email: string } | null>(null);
 
   useEffect(() => {
-    const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-    if (!token) {
-      router.replace("/login");
-      return;
-    }
-    getUserInfo(token)
+    getUserInfo()
       .then((user) => {
         if (user.role === "admin") {
           setSession({ user });
@@ -39,7 +34,7 @@ export default function EditSchoolUser() {
 
     // Fetch school user data
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/school/${id}`, {
-      headers: { Authorization: `Bearer ${token}` },
+      credentials: "include",
     })
       .then(res => res.json())
       .then(data => setInitial({ name: data.name, email: data.email }))
@@ -49,10 +44,10 @@ export default function EditSchoolUser() {
   // This handles the actual update API call
   const handleUpdate = async (data: { name: string; email: string; password?: string }) => {
     setLoading(true);
-    const token = localStorage.getItem("token");
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/school/${id}`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
     setLoading(false);

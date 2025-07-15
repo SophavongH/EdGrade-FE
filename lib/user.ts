@@ -13,11 +13,9 @@ export type Session = {
   user: User;
 };
 
-export const getUserInfo = async (token: string) => {
+export const getUserInfo = async () => {
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/me`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    credentials: "include",
   });
   if (!res.ok) throw new Error('Unauthorized');
   return res.json();

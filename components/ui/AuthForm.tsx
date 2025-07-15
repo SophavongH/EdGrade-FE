@@ -44,8 +44,7 @@ export default function AuthForm() {
 
     if (result.success) {
       toast.success(t("loginSuccess"));
-      if (result.token) localStorage.setItem("token", result.token);
-      if (result.user?.id) localStorage.setItem("userId", result.user.id);
+      // Removed localStorage usage, use cookie-based auth only
       router.push(result.role === "admin" ? "/admin" : "/school");
     } else {
       if (result.error?.toLowerCase().includes("email")) {

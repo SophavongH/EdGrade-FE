@@ -50,6 +50,15 @@ export default function ProfileMenuUp({
     return () => document.removeEventListener("mousedown", handleClick);
   }, [open, langDropdown]);
 
+  // Logout using cookie-based auth
+  const handleLogout = async () => {
+    await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/logout`, {
+      method: "POST",
+      credentials: "include",
+    });
+    router.push("/login");
+  };
+
   return (
     <div className="relative" ref={ref}>
       <button
@@ -125,10 +134,7 @@ export default function ProfileMenuUp({
           </div>
           <button
             className="w-full text-left px-4 py-3 hover:bg-red-50 text-red-600 flex items-center gap-2 border-t"
-            onClick={() => {
-              localStorage.removeItem("token");
-              router.push("/login");
-            }}
+            onClick={handleLogout}
           >
             <LogOut className="w-5 h-5" /> {t("logout")}
           </button>

@@ -16,12 +16,7 @@ export default function CreateSchoolUser() {
   const { t } = useLanguage();
 
   useEffect(() => {
-    const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-    if (!token) {
-      router.replace("/login");
-      return;
-    }
-    getUserInfo(token)
+    getUserInfo()
       .then((user) => {
         if (user.role === "admin") {
           setSession({ user });
@@ -37,12 +32,11 @@ export default function CreateSchoolUser() {
 
   const handleSubmit = async (data: { name: string; email: string; password?: string }) => {
     setLoading(true);
-    const token = localStorage.getItem("token");
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/create-school-user`, {
       method: "POST",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(data),
     });

@@ -8,7 +8,6 @@ import Image from "next/image";
 import SchoolSidebar from "@/components/dashboard/Schoolsidebar";
 import Sidebar from "@/components/dashboard/Sidebar";
 
-
 export default function ProfilePage() {
   const router = useRouter();
   const { t } = useLanguage();
@@ -28,16 +27,18 @@ export default function ProfilePage() {
 
   // Fetch user info on mount
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      router.replace("/login");
-      return;
-    }
     fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/profile`, {
-      headers: { Authorization: `Bearer ${token}` },
+      credentials: "include",
     })
-      .then(res => res.json())
+      .then(res => {
+        if (res.status === 401) {
+          router.replace("/login");
+          return null;
+        }
+        return res.json();
+      })
       .then((data) => {
+        if (!data) return;
         setForm(f => ({
           ...f,
           name: data.name || "",
@@ -80,7 +81,6 @@ export default function ProfilePage() {
       return;
     }
     setLoading(true);
-    const token = localStorage.getItem("token");
     const payload: any = {
       name: form.name,
       email: form.email,
@@ -89,18 +89,17 @@ export default function ProfilePage() {
     if (form.newPassword) payload.password = form.newPassword;
     const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/profile`, {
       method: "PUT",
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(payload),
     });
     setLoading(false);
     if (res.ok) {
       // Refetch updated user profile
-      const token = localStorage.getItem("token");
       const updatedUser = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/profile`, {
-        headers: { Authorization: `Bearer ${token}` },
+        credentials: "include",
       }).then(r => r.json());
       setSession({ user: updatedUser }); // update session with new avatar
       alert(t("profileUpdated"));

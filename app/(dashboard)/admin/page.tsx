@@ -31,18 +31,13 @@ const Page = () => {
   const { t } = useLanguage();
 
   useEffect(() => {
-    const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-    if (!token) {
-      router.replace("/login");
-      return;
-    }
-    getUserInfo(token)
+    getUserInfo()
       .then((user) => {
         if (user.role === "admin") {
           setSession({ user });
           // Fetch dashboard data
           fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/dashboard`, {
-            headers: { Authorization: `Bearer ${token}` },
+            credentials: "include",
           })
             .then((res) => res.json())
             .then((data) => {

@@ -38,12 +38,11 @@ const SchoolTable: React.FC<SchoolTableProps> = ({ schools, setSchools }) => {
   const handleDelete = async () => {
     if (!selectedSchool) return;
     setDeletingId(selectedSchool.id);
-    const token = localStorage.getItem("token");
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/admin/school/${selectedSchool.id}`,
       {
         method: "DELETE",
-        headers: { Authorization: `Bearer ${token}` },
+        credentials: "include", // <-- use cookie-based auth
       }
     );
     setDeletingId(null);
@@ -58,14 +57,13 @@ const SchoolTable: React.FC<SchoolTableProps> = ({ schools, setSchools }) => {
 
   const handleStatusChange = async (school: School, newStatus: string) => {
     setStatusChangingId(school.id);
-    const token = localStorage.getItem("token");
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/admin/school/${school.id}/status`,
       {
         method: "PATCH",
+        credentials: "include", // <-- use cookie-based auth
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ status: newStatus }),
       }

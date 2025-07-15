@@ -1,19 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL
   ? `${process.env.NEXT_PUBLIC_API_URL}/api`
   : "http://localhost:4000/api";
-
-// Helper to get token from localStorage
-function getAuthHeaders(): Record<string, string> {
-  if (typeof window === "undefined") return {};
-  const token = localStorage.getItem("token");
-  return token ? { Authorization: `Bearer ${token}` } : {};
-}
 
 // ---- CLASSROOMS ----
 
 export const fetchClassrooms = async () => {
   const res = await fetch(`${BASE_URL}/classrooms`, {
-    headers: getAuthHeaders(),
+    credentials: "include", // <-- use cookies
   });
   if (!res.ok) throw new Error("Failed to fetch classrooms");
   return res.json();
@@ -22,7 +16,8 @@ export const fetchClassrooms = async () => {
 export const createClassroom = async (data: { name: string; color: string }) => {
   const res = await fetch(`${BASE_URL}/classrooms`, {
     method: "POST",
-    headers: Object.assign({ "Content-Type": "application/json" }, getAuthHeaders()),
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
   if (!res.ok) throw new Error("Failed to create classroom");
@@ -32,7 +27,8 @@ export const createClassroom = async (data: { name: string; color: string }) => 
 export const updateClassroom = async (id: number, name: string) => {
   const res = await fetch(`${BASE_URL}/classrooms/${id}`, {
     method: "PATCH",
-    headers: Object.assign({ "Content-Type": "application/json" }, getAuthHeaders()),
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name }),
   });
   if (!res.ok) throw new Error("Failed to update classroom");
@@ -42,7 +38,7 @@ export const updateClassroom = async (id: number, name: string) => {
 export const archiveClassroom = async (id: number) => {
   const res = await fetch(`${BASE_URL}/classrooms/${id}/archive`, {
     method: "PATCH",
-    headers: getAuthHeaders(),
+    credentials: "include",
   });
   if (!res.ok) throw new Error("Failed to archive classroom");
   return res.json();
@@ -50,7 +46,7 @@ export const archiveClassroom = async (id: number) => {
 
 export const fetchArchivedClassrooms = async () => {
   const res = await fetch(`${BASE_URL}/classrooms/archived`, {
-    headers: getAuthHeaders(),
+    credentials: "include",
   });
   if (!res.ok) throw new Error("Failed to fetch archived classrooms");
   return res.json();
@@ -59,7 +55,7 @@ export const fetchArchivedClassrooms = async () => {
 export const unarchiveClassroom = async (id: string | number) => {
   const res = await fetch(`${BASE_URL}/classrooms/${id}/unarchive`, {
     method: "PATCH",
-    headers: getAuthHeaders(),
+    credentials: "include",
   });
   if (!res.ok) throw new Error("Failed to unarchive classroom");
   return res.json();
@@ -69,28 +65,28 @@ export const unarchiveClassroom = async (id: string | number) => {
 
 export const fetchStudents = async () => {
   const res = await fetch(`${BASE_URL}/students`, {
-    headers: getAuthHeaders(),
+    credentials: "include",
   });
   if (!res.ok) throw new Error("Failed to fetch students");
   return res.json();
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const createStudent = async (data: any) => {
   const res = await fetch(`${BASE_URL}/students`, {
     method: "POST",
-    headers: Object.assign({ "Content-Type": "application/json" }, getAuthHeaders()),
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
   if (!res.ok) throw new Error("Failed to create student");
   return res.json();
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const updateStudent = async (id: string, data: any) => {
   const res = await fetch(`${BASE_URL}/students/${id}`, {
     method: "PUT",
-    headers: Object.assign({ "Content-Type": "application/json" }, getAuthHeaders()),
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
   if (!res.ok) throw new Error("Failed to update student");
@@ -100,7 +96,7 @@ export const updateStudent = async (id: string, data: any) => {
 export const deleteStudent = async (id: string) => {
   const res = await fetch(`${BASE_URL}/students/${id}`, {
     method: "DELETE",
-    headers: getAuthHeaders(),
+    credentials: "include",
   });
   if (!res.ok) throw new Error("Failed to delete student");
   return res.json();
@@ -108,7 +104,7 @@ export const deleteStudent = async (id: string) => {
 
 export const fetchStudent = async (id: string) => {
   const res = await fetch(`${BASE_URL}/students/${id}`, {
-    headers: getAuthHeaders(),
+    credentials: "include",
   });
   if (!res.ok) throw new Error("Failed to fetch student");
   return res.json();
@@ -117,7 +113,7 @@ export const fetchStudent = async (id: string) => {
 // ---- CLASSROOM BY ID For Detail ----
 export const fetchClassroomById = async (id: string | number) => {
   const res = await fetch(`${BASE_URL}/classrooms/${id}`, {
-    headers: getAuthHeaders(),
+    credentials: "include",
   });
   if (!res.ok) throw new Error("Failed to fetch classroom");
   return res.json();
@@ -125,7 +121,7 @@ export const fetchClassroomById = async (id: string | number) => {
 // ---- STUDENTS IN CLASSROOM ----
 export const fetchClassroomStudents = async (classroomId: string | number) => {
   const res = await fetch(`${BASE_URL}/classrooms/${classroomId}/students`, {
-    headers: getAuthHeaders(),
+    credentials: "include",
   });
   if (!res.ok) throw new Error("Failed to fetch classroom students");
   return res.json();
@@ -134,7 +130,8 @@ export const fetchClassroomStudents = async (classroomId: string | number) => {
 export const addStudentsToClassroom = async (classroomId: string | number, studentIds: string[]) => {
   const res = await fetch(`${BASE_URL}/classrooms/${classroomId}/students`, {
     method: "POST",
-    headers: Object.assign({ "Content-Type": "application/json" }, getAuthHeaders()),
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ studentIds }),
   });
   if (!res.ok) throw await res.json();
@@ -144,7 +141,7 @@ export const addStudentsToClassroom = async (classroomId: string | number, stude
 export const removeStudentFromClassroom = async (classroomId: string | number, studentId: string) => {
   const res = await fetch(`${BASE_URL}/classrooms/${classroomId}/students/${studentId}`, {
     method: "DELETE",
-    headers: getAuthHeaders(),
+    credentials: "include",
   });
   if (!res.ok) throw new Error("Failed to remove student from classroom");
   return res.json();
@@ -155,7 +152,7 @@ export const fetchReportCards = async (classroomId: string) => {
   const res = await fetch(
     `${BASE_URL}/report-cards/classrooms/${classroomId}/report-cards`,
     {
-      headers: getAuthHeaders(),
+      credentials: "include",
     }
   );
   if (!res.ok) throw new Error("Failed to fetch report cards");
@@ -165,8 +162,9 @@ export const fetchReportCards = async (classroomId: string) => {
 export const createReportCard = async (classroomId: string | number, title: string, subjects: string[]) => {
   const res = await fetch(`${BASE_URL}/report-cards/classrooms/${classroomId}/report-cards`, {
     method: "POST",
-    headers: Object.assign({ "Content-Type": "application/json" }, getAuthHeaders()),
-    body: JSON.stringify({ title, subjects }), // <-- include subjects!
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ title, subjects }),
   });
   if (!res.ok) throw new Error("Failed to create report card");
   return res.json();
@@ -175,21 +173,20 @@ export const createReportCard = async (classroomId: string | number, title: stri
 export const deleteReportCard = async (reportCardId: number) => {
   const res = await fetch(`${BASE_URL}/report-cards/${reportCardId}`, {
     method: "DELETE",
-    headers: getAuthHeaders(),
+    credentials: "include",
   });
   if (!res.ok) throw new Error("Failed to delete report card");
   return res.json();
 };
 
-
 export const saveReportCardScores = async (
   reportCardId: string | number,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   scores: Record<string, any>
 ) => {
   const res = await fetch(`${BASE_URL}/report-cards/${reportCardId}/scores`, {
     method: "POST",
-    headers: Object.assign({ "Content-Type": "application/json" }, getAuthHeaders()),
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ scores }),
   });
   if (!res.ok) throw new Error("Failed to save report card scores");
@@ -198,7 +195,7 @@ export const saveReportCardScores = async (
 
 export const fetchReportCardScores = async (reportCardId: string | number) => {
   const res = await fetch(`${BASE_URL}/report-cards/${reportCardId}/scores`, {
-    headers: getAuthHeaders(),
+    credentials: "include",
   });
   if (!res.ok) throw new Error("Failed to fetch report card scores");
   return res.json();
@@ -207,7 +204,8 @@ export const fetchReportCardScores = async (reportCardId: string | number) => {
 export const sendReportCardSMS = async (reportCardId: string | number, studentIds: string[]) => {
   const res = await fetch(`${BASE_URL}/report-cards/${reportCardId}/send-sms`, {
     method: "POST",
-    headers: Object.assign({ "Content-Type": "application/json" }, getAuthHeaders()),
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ studentIds }),
   });
   if (!res.ok) throw new Error("Failed to send SMS");
@@ -217,24 +215,18 @@ export const sendReportCardSMS = async (reportCardId: string | number, studentId
 // ---- CUSTOM SUBJECTS ----
 
 export async function fetchCustomSubjects() {
-  const token = localStorage.getItem("token");
   const res = await fetch(`${BASE_URL}/user-subjects`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+    credentials: "include",
   });
   if (!res.ok) throw new Error("Failed to fetch custom subjects");
   return res.json();
 }
 
 export async function addCustomSubject(subject: string) {
-  const token = localStorage.getItem("token");
   const res = await fetch(`${BASE_URL}/user-subjects`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ subject }),
   });
   if (!res.ok) throw new Error("Failed to add subject");
@@ -242,13 +234,10 @@ export async function addCustomSubject(subject: string) {
 }
 
 export async function deleteCustomSubject(subject: string) {
-  const token = localStorage.getItem("token");
   const res = await fetch(`${BASE_URL}/user-subjects`, {
     method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ subject }),
   });
   if (!res.ok) throw new Error("Failed to delete subject");
@@ -256,13 +245,10 @@ export async function deleteCustomSubject(subject: string) {
 }
 
 export async function saveReportCardSubjects(reportCardId: string | number, subjects: string[]) {
-  const token = localStorage.getItem("token");
   const res = await fetch(`${BASE_URL}/report-cards/${reportCardId}/subjects`, {
     method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ subjects }),
   });
   if (!res.ok) throw new Error("Failed to save report card subjects");

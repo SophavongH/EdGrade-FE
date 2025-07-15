@@ -12,12 +12,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   useEffect(() => {
-    const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-    if (!token) {
-      router.replace("/login");
-      return;
-    }
-    getUserInfo(token)
+    getUserInfo()
       .then((user) => {
         if (user.role === "user") {
           setSession({ user });
@@ -42,7 +37,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           height={64}
           className="mb-4 h-16 w-16"
           unoptimized
-        
         />
       </div>
     );
