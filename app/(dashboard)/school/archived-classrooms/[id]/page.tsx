@@ -7,9 +7,10 @@ import StudentTable from "@/components/dashboard/studentTable";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import type { Student } from "@/types/student";
+import ArchivedReportCardTable from "@/components/dashboard/ArchivedReportCardTable";
 
 type Classroom = {
-  id: string | number;
+  id: number;
   name: string;
   totalStudents: number;
 };
@@ -32,6 +33,7 @@ export default function ArchivedClassroomDetailPage() {
   const [reportCards, setReportCards] = useState<ReportCard[]>([]);
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<"students" | "reportCards">("students");
+  const [selectedReportCardId, setSelectedReportCardId] = useState<number | null>(null);
 
   useEffect(() => {
     async function loadData() {
@@ -111,19 +113,28 @@ export default function ArchivedClassroomDetailPage() {
           {reportCards.length === 0 ? (
             <div className="text-gray-400">{t("noReportCardsYet")}</div>
           ) : (
-            <ul className="divide-y">
-              {reportCards.map((rc) => (
-                <li key={rc.id} className="py-2 flex items-center justify-between">
-                  <span>{rc.title}</span>
-                  <Link
-                    href={`/school/classrooms/${classroom.id}/report-cards/${rc.id}`}
-                    className="text-blue-600 hover:underline"
-                  >
-                    {t("view")}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <>
+              <ul className="divide-y">
+                {reportCards.map((rc) => (
+                  <li key={rc.id} className="py-2 flex items-center justify-between">
+                    <span>{rc.title}</span>
+                    <button
+                      className="text-blue-600 hover:underline"
+                      onClick={() => setSelectedReportCardId(rc.id)}
+                    >
+                      {t("view")}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+              {selectedReportCardId && (
+                <ArchivedReportCardTable
+                  classroomId={classroom.id}
+                  reportCardId={selectedReportCardId}
+                  onClose={() => setSelectedReportCardId(null)}
+                />
+              )}
+            </>
           )}
         </div>
       )}
